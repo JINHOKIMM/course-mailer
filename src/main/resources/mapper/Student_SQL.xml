@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.mapper.StudentMapper">
+
+    <select id="findByEmail" resultType="com.school.domain.Student">
+        SELECT
+            student_id,
+            student_no,
+            name,
+            email,
+            grade,
+            created_at
+        FROM student
+        WHERE email = #{email}
+    </select>
+
+    <insert id="insertStudent"
+            useGeneratedKeys="true"
+            keyProperty="studentId">
+        INSERT INTO student (
+            student_no,
+            name,
+            email,
+            grade
+        ) VALUES (
+                     #{studentNo},
+                     #{name},
+                     #{email},
+                     #{grade}
+                 )
+    </insert>
+
+</mapper>
