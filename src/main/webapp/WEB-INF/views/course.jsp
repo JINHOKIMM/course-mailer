@@ -101,6 +101,32 @@
 </div>
 
 <script>
+    let loginUser = null;
+
+    // ======================
+    // 로그인 사용자 정보 조회
+    // ======================
+    fetch("/student/me")
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("로그인 정보 조회 실패");
+            }
+            return res.json();
+        })
+        .then(data => {
+            loginUser = data;
+            console.log("로그인 사용자:", loginUser);
+
+            // 예시
+            // loginUser.email
+            // loginUser.name
+            // loginUser.sub (구글 고유 ID)
+        })
+        .catch(err => {
+            console.error(err);
+            alert("로그인이 필요합니다.");
+            location.href = "/login";
+        });
     /* ======================
        임시 데이터
     ====================== */
@@ -153,6 +179,8 @@
 
         // fetch("/api/courses", { ... })
         alert("다음 단계로 이동 (콘솔 확인)");
+
+
     }
 </script>
 
