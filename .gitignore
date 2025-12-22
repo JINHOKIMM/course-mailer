@@ -1,5 +1,6 @@
 # Build
-/target/
+/build/
+/.gradle/
 
 # IntelliJ
 /.idea/

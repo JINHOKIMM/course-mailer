@@ -17,8 +17,11 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/", "/css/**", "/js/**","/WEB-INF/**").permitAll()
                         .anyRequest().permitAll()
                 )
-                .csrf(csrf -> csrf.disable());
-
+                .csrf(csrf -> csrf.disable())
+                .oauth2Login(oauth -> oauth
+                    .loginPage("/login")        // ⭐ 네 JSP 로그인 페이지
+                    .defaultSuccessUrl("/course", true)
+        );
         return http.build();
     }
 }
