@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: course-mailer
+
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/course?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 123456789a!
+
+  sql:
+    init:
+      mode: never
+
+  servlet:
+    jsp:
+      init-parameters:
+        development: true
+
+  web:
+    resources:
+      cache:
+        period: 0
