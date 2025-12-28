@@ -3,34 +3,70 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.school.mapper.StudentMapper">
+<mapper namespace="com.school.coursemailer.mapper.StudentMapper">
 
-    <select id="findByEmail" resultType="com.school.domain.Student">
+    <select id="selectBySub" resultType="map">
         SELECT
-            student_id,
-            student_no,
-            name,
-            email,
-            grade,
-            created_at
+            student_id
+            ,google_email
+            ,name
+            ,created_at
+            ,picture
+            ,email_verified
+            ,given_name
+            ,sub
+            ,grade
+            ,mail_YN
         FROM student
-        WHERE email = #{email}
+        WHERE sub = #{sub}
     </select>
 
-    <insert id="insertStudent"
-            useGeneratedKeys="true"
-            keyProperty="studentId">
+    <insert id="insertStudent">
         INSERT INTO student (
-            student_no,
-            name,
-            email,
-            grade
+            google_email
+            ,name
+            ,created_at
+            ,picture
+            ,email_verified
+            ,given_name
+            ,sub
         ) VALUES (
-                     #{studentNo},
-                     #{name},
-                     #{email},
-                     #{grade}
+             #{email},
+             #{name},
+             now(),
+             #{picture},
+             #{email_verified},
+             #{given_name},
+             #{sub}
                  )
     </insert>
+
+    <update id="updateStudent" parameterType="map">
+        UPDATE student
+        <set>
+            <if test="google_email != null">
+                google_email = #{google_email},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="picture != null">
+                picture = #{picture},
+            </if>
+            <if test="email_verified != null">
+                email_verified = #{email_verified},
+            </if>
+            <if test="given_name != null">
+                given_name = #{given_name},
+            </if>
+            <if test="grade != null">
+                grade = #{grade},
+            </if>
+            <if test="mail_YN != null">
+                mail_YN = #{mail_YN},
+            </if>
+        </set>
+        WHERE sub = #{sub}
+    </update>
 
 </mapper>

@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .oauth2Login(oauth -> oauth
                     .loginPage("/login")        // ⭐ 네 JSP 로그인 페이지
-                    .defaultSuccessUrl("/course", true)
+                    .defaultSuccessUrl("/main", true)
         );
         return http.build();
     }

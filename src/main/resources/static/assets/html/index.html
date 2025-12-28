@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<title>ODA</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
+	<link rel="stylesheet" href="../css/reset.css">
+	<link rel="stylesheet" href="../css/style.css">
+
+	<script defer src="../js/jquery-3.7.1.min.js"></script>
+	<script defer src="../js/ui.js"></script>
+</head>
+
+<body>
+	<!-- wrap -->
+	<div id="wrap" class="wrapper">
+		<!-- header -->
+		<div id="header" class="header">
+            <h1 class="logo">
+                <a href="#">St. Johnsbury Academy Jeju</a>
+            </h1>
+		    <button><span>Hera Kim</span><img src="../img/user.png" alt=""></button>
+		</div>
+		<!-- //header -->
+
+		<!-- container -->
+		<div id="container" class="container">
+            <div class="list">
+                <ul>
+                    <li>
+                        <p class="tit">Grade</p>
+                        <div class="sch">
+                            <input type="text">
+                            <button type="button" class="btn-sch"></button>
+                        </div>
+						<ul class="item">
+						    <li>
+						        <input type="radio" id="rdo01" name="Grade" value="9th Grade" checked>
+								<label for="rdo01">9th Grade</label>
+						    </li>
+						    <li>
+						        <input type="radio" id="rdo02" name="Grade" value="10th Grade">
+								<label for="rdo02">10th Grade</label>
+						    </li>
+						    <li>
+						        <input type="radio" id="rdo03" name="Grade" value="11th Grade">
+								<label for="rdo03">11th Grade</label>
+						    </li>
+						    <li>
+						        <input type="radio" id="rdo04" name="Grade" value="12th Grade">
+								<label for="rdo04">12th Grade</label>
+						    </li>
+						</ul>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn">Clear</button>
+                            <button type="button" class="btn blue">Done</button>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <p class="tit">Previously taken courses</p>
+						<ul class="item">
+						    <li>
+						        <input type="checkbox" id="chk01-01">
+								<label for="chk01-01">English 9</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-02">
+								<label for="chk01-02">English 10</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-03" disabled>
+								<label for="chk01-03">AP Seminar</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-04">
+								<label for="chk01-04">AP Research</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-05">
+								<label for="chk01-05">AP English Language and Composition</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-06">
+								<label for="chk01-06">AP English Literature and Composition</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-07">
+								<label for="chk01-07">Algebra |</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-08">
+								<label for="chk01-08">Geometry</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-09">
+								<label for="chk01-09">Algebra Il</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-10">
+								<label for="chk01-10">Pre-Calculus A [If you took precalculus, check this)</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk01-11">
+								<label for="chk01-11">Pre-Calculus B (If you took precalculus, check this)</label>
+						    </li>
+						</ul>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn">Clear</button>
+                            <button type="button" class="btn blue">Done</button>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <p class="tit">Subjects to be taken in the future</p>
+						<ul class="item">
+						    <li>
+						        <input type="checkbox" id="chk02-01">
+								<label for="chk02-01">English 9</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-02">
+								<label for="chk02-02">English 10</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-03">
+								<label for="chk02-03">AP Seminar</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-04">
+								<label for="chk02-04">AP Research</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-05">
+								<label for="chk02-05">AP English Language and Composition</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-06">
+								<label for="chk02-06">AP English Literature and Composition</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-07">
+								<label for="chk02-07">Algebra |</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-08">
+								<label for="chk02-08">Geometry</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-09">
+								<label for="chk02-09">Algebra Il</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-10">
+								<label for="chk02-10">Pre-Calculus A [If you took precalculus, check this)</label>
+						    </li>
+						    <li>
+						        <input type="checkbox" id="chk02-11">
+								<label for="chk02-11">Pre-Calculus B (If you took precalculus, check this)</label>
+						    </li>
+						</ul>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn">Clear</button>
+                            <button type="button" class="btn blue">Done</button>
+                        </div>
+                    </li>
+                </ul>
+                <div class="btn-wrap">
+                    <button type="button" class="btn pt">Next</button>
+                </div>
+            </div>
+		</div>
+		<!-- //container -->
+		
+		<!-- popup -->
+		<div class="popup" style="display: none;">
+		    <p class="tit">Are you changing your class schedule<br>because of graduation credits?</p>
+		    <p>If you select "Yes," an email will be sent to your<br>counselor, and you'll just need to have a meeting.<br>If you select "No," you'll be redirected to the schedule<br>change website.</p>
+			<div class="btn-wrap">
+			    <button type="button" class="btn pt">Yes</button>
+			    <button type="button" class="btn gray">No</button>
+			</div>
+			<p class="sub">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
+		</div>
+		<!-- //popup -->
+	</div>
+	<!-- //wrap -->
+</body>
+
+</html>
