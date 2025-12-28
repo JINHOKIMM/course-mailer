@@ -9,16 +9,26 @@ public class HomeController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/login"; // 또는 redirect:/courses
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // /WEB-INF/views/login.jsp
+        return "login";
     }
 
     @GetMapping("/course")
     public String course() {
-        return "course"; // /WEB-INF/views/login.jsp
+        return "course";
+    }
+
+    @GetMapping("/main")
+    public String mains() {
+        return "main";
+    }
+
+    @GetMapping("/sub")
+    public String sub() {
+        return "sub";
     }
 }
