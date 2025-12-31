@@ -30,10 +30,13 @@
         <h1 class="logo">
             <a href="#">St. Johnsbury Academy Jeju</a>
         </h1>
-        <button class="user-btn">
-            <span id="userNm"></span>
-            <img id="userPicture" src="${pageContext.request.contextPath}/assets/img/user.png" alt="">
-        </button>
+        <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
+
+        <div class="userBox">
+            <ul>
+                <li><button type="button" class="logout">sign out</button></li>
+            </ul>
+        </div>
     </div>
     <!-- //header -->
 
@@ -65,8 +68,7 @@
                     </ul>
 
                     <div class="btn-wrap">
-                        <button type="button" class="btn">Clear</button>
-                        <button type="button" class="btn blue">Done</button>
+                        <button type="button" class="btn blue" onclick="onClickDone()">Done</button>
                     </div>
                 </li>
 
@@ -77,19 +79,20 @@
                         <input type="text">
                         <button type="button" class="btn-sch"></button>
                     </div>
-                    <ul class="item">
-                        <li><input type="checkbox" id="chk01-01"><label for="chk01-01">English 9</label></li>
-                        <li><input type="checkbox" id="chk01-02"><label for="chk01-02">English 10</label></li>
-                        <li><input type="checkbox" id="chk01-03" disabled><label for="chk01-03">AP Seminar</label></li>
-                        <li><input type="checkbox" id="chk01-04"><label for="chk01-04">AP Research</label></li>
-                        <li><input type="checkbox" id="chk01-05"><label for="chk01-05">AP English Language and Composition</label></li>
-                        <li><input type="checkbox" id="chk01-06"><label for="chk01-06">AP English Literature and Composition</label></li>
-                        <li><input type="checkbox" id="chk01-07"><label for="chk01-07">Algebra I</label></li>
-                        <li><input type="checkbox" id="chk01-08"><label for="chk01-08">Geometry</label></li>
-                        <li><input type="checkbox" id="chk01-09"><label for="chk01-09">Algebra II</label></li>
-                        <li><input type="checkbox" id="chk01-10"><label for="chk01-10">Pre-Calculus A</label></li>
-                        <li><input type="checkbox" id="chk01-11"><label for="chk01-11">Pre-Calculus B</label></li>
-                    </ul>
+                    <div class="tbl-scroll">
+                        <table class="course-table">
+                            <thead>
+                            <tr>
+                                <th>Check</th>
+                                <th>Course</th>
+                                <th>Condition</th>
+                                <th>Grade</th>
+                            </tr>
+                            </thead>
+                            <tbody id="prevCourseBody">
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div class="btn-wrap">
                         <button type="button" class="btn">Clear</button>
@@ -102,20 +105,20 @@
                         <input type="text">
                         <button type="button" class="btn-sch"></button>
                     </div>
-                    <ul class="item">
-                        <li><input type="checkbox" id="chk02-01"><label for="chk02-01">English 9</label></li>
-                        <li><input type="checkbox" id="chk02-02"><label for="chk02-02">English 10</label></li>
-                        <li><input type="checkbox" id="chk02-03"><label for="chk02-03">AP Seminar</label></li>
-                        <li><input type="checkbox" id="chk02-04"><label for="chk02-04">AP Research</label></li>
-                        <li><input type="checkbox" id="chk02-05"><label for="chk02-05">AP English Language and Composition</label></li>
-                        <li><input type="checkbox" id="chk02-06"><label for="chk02-06">AP English Literature and Composition</label></li>
-                        <li><input type="checkbox" id="chk02-07"><label for="chk02-07">Algebra I</label></li>
-                        <li><input type="checkbox" id="chk02-08"><label for="chk02-08">Geometry</label></li>
-                        <li><input type="checkbox" id="chk02-09"><label for="chk02-09">Algebra II</label></li>
-                        <li><input type="checkbox" id="chk02-10"><label for="chk02-10">Pre-Calculus A</label></li>
-                        <li><input type="checkbox" id="chk02-11"><label for="chk02-11">Pre-Calculus B</label></li>
-                    </ul>
-
+                    <div class="tbl-scroll">
+                        <table class="course-table">
+                            <thead>
+                            <tr>
+                                <th>Check</th>
+                                <th>Course</th>
+                                <th>Condition</th>
+                                <th>Grade</th>
+                            </tr>
+                            </thead>
+                            <tbody id="futureCourseBody">
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="btn-wrap">
                         <button type="button" class="btn">Clear</button>
                         <button type="button" class="btn blue">Done</button>
@@ -124,41 +127,29 @@
             </ul>
 
             <div class="btn-wrap">
-                <button type="button" class="btn pt">Next</button>
+                <button type="button" class="btn pt" onclick="location.href='/sub'">Next</button>
             </div>
         </div>
     </div>
     <!-- //container -->
 
     <!-- popup -->
-    <div class="popup-wrap" style="display:none;">
-        <div class="popup">
-            <h2 class="popup-title">
-                Are you changing your class schedule<br>
-                because of graduation credits?
-            </h2>
-
-            <p class="popup-desc">
-                If you select "Yes," an email will be sent to your counselor.<br>
-                If you select "No," you'll be redirected to the schedule change website.
-            </p>
-
-            <div class="popup-btns">
-                <button type="button" class="btn yes" onclick="updateGrade('13');">Yes</button>
-                <button type="button" class="btn no" onclick="closeGradeModal();">No</button>
-            </div>
-
-            <p class="popup-footer">
-                Created by Minseo (Hera) Kim<br>
-                Site managed by Minseo (Hera) Kim
-            </p>
+    <div class="popup" style="display: none;">
+        <p class="tit">Are you changing your class schedule<br>because of graduation credits?</p>
+        <p>If you select "Yes," an email will be sent to your<br>counselor, and you'll just need to have a meeting.<br>If you select "No," you'll be redirected to the schedule<br>change website.</p>
+        <div class="btn-wrap">
+            <button type="button" class="btn pt">Yes</button>
+            <button type="button" class="btn gray">No</button>
         </div>
+        <p class="sub">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
     </div>
 
 </div>
+<div class="dim"></div>
 <script>
     $(function () {
         loginChk();
+        selectCourseCondList();
     });
 
     function loginChk(){
@@ -192,6 +183,75 @@
         });
     }
 
+    function selectCourseCondList(){
+        $.ajax({
+            url: "/course/courseCond",
+            type: "GET",
+            xhrFields: { withCredentials: true },
+            success: function(res) {
+                const $prev = $("#prevCourseBody");
+                const $future = $("#futureCourseBody");
+
+                $prev.empty();
+                $future.empty();
+
+                res.forEach(course => {
+                    $prev.append(createCourseRow(course, "prev"));
+                    $future.append(createCourseRow(course, "future"));
+                });
+            },
+            error: function(xhr) {
+                alert("수업 조건을 불러오지 못했습니다.");
+            }
+        });
+    }
+
+
+    function createCourseRow(course, prefix) {
+        const tr = document.createElement("tr");
+        const id = prefix + "_course_" + course.condition_id;
+
+        // checkbox
+        const tdCheck = document.createElement("td");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = id;
+
+        const label = document.createElement("label");
+        label.setAttribute("for", id);
+        label.textContent = ""; // label 필수 (CSS용)
+
+        tdCheck.appendChild(checkbox);
+        tdCheck.appendChild(label);
+
+        // course
+        const tdName = document.createElement("td");
+        tdName.textContent = course.course_name;
+
+        // condition
+        const tdCond = document.createElement("td");
+        tdCond.textContent = course.condition_desc || "N/A";
+
+        // grade
+        const tdGrade = document.createElement("td");
+        const select = document.createElement("select");
+
+        ["A","B","C","D","E"].forEach(v => {
+            const opt = document.createElement("option");
+            opt.textContent = v;
+            select.appendChild(opt);
+        });
+
+        tdGrade.appendChild(select);
+
+        tr.append(tdCheck, tdName, tdCond, tdGrade);
+        return tr;
+    }
+
+
+
+
+
     function getCourseData(){
        /*
         $.ajax({
@@ -209,6 +269,22 @@
             }
         });
         */
+    }
+
+    function onClickDone() {
+        const selected = document.querySelector('input[name="grade"]:checked');
+
+        if (!selected) {
+            alert("학년을 선택하세요.");
+            return;
+        }
+
+        // 숫자만 추출
+        const gradeNum = selected.value.match(/\d+/)[0];
+
+        console.log('gradeNum ===', gradeNum); // 9, 10, 11, 12
+
+        updateGrade(gradeNum);
     }
 
     function updateGrade(grade){
@@ -237,6 +313,18 @@
     function closeGradeModal() {
         $(".popup-wrap").fadeOut(200);
     }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+
 
 </script>
 </body>
