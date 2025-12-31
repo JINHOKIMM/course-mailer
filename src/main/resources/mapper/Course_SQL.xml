@@ -3,6 +3,15 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.school.coursemailer.mapper..CourseMapper">
+<mapper namespace="com.school.coursemailer.mapper.CourseMapper">
 
+    <select id="selectCourseCond" parameterType="String" resultType="map">
+        SELECT
+            condition_id
+            ,course_name            /*수업명*/
+            ,condition_desc         /*수업조건*/
+            ,created_at             /*생성일*/
+        FROM
+            course_condition
+    </select>
 </mapper>

@@ -23,16 +23,27 @@ public class StudentApiController {
         this.studentService = studentService;
     }
 
+    // =========================
+    // 공통 로그인 체크 메서드
+    // =========================
+    private OAuth2User requireLogin(OAuth2User user) {
+        if (user == null) {
+            log.info("=== 로그인 x ===");
+            throw new UnauthorizedException();
+        }
+        return user;
+    }
+
+    private String getSub(OAuth2User user) {
+        return user.getAttribute("sub");
+    }
+
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal OAuth2User user) {
         log.info("=== start 로그인 정보 확인 ===");
 
-        if (user == null) {
-            log.info("=== 로그인 x ===");
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "NOT_AUTHENTICATED"));
-        }
+        user = requireLogin(user);
+
 
         // OAuth 정보 추출
         Map<String, Object> oauthInfo = new HashMap<>();
@@ -51,16 +62,9 @@ public class StudentApiController {
 
     @PutMapping("/userInfo")
     public ResponseEntity<?> updateGrade(@AuthenticationPrincipal OAuth2User user, @RequestParam("grade") String grade ) {
-        if (user == null) {
-            log.info("=== 로그인 x ===");
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "NOT_AUTHENTICATED"));
-        }
+        user = requireLogin(user);
 
-        String sub = user.getAttribute("sub");
-
-        studentService.updateGrade(sub, grade);
+        studentService.updateGrade(getSub(user), grade);
 
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
