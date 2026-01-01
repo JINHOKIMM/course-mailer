@@ -18,8 +18,23 @@ body.lock {overflow: hidden;}
 .btn.accordion:not(.active)::after {transform: rotate(180deg);}
 .btn.accordion.active {text-decoration: underline;}
 
-select {min-width: 60px; height: 24px; padding: 0 10px; font-size: 14px; font-weight: 400; line-height: 1; color: #6D7882; background: #fff url(../img/ico_sch_arr.svg) no-repeat center right 5px; border: 1px solid #61758F; border-radius: 4px; -webkit-appearance: none; -moz-appearance: none; appearance: none;}
-select:disabled {filter: contrast(0.5);}
+select {
+    min-width: 80px;                 /* ⬅ 가로 여유 */
+    height: 32px;                    /* ⭐ 핵심 */
+    padding: 0 28px 0 10px;           /* ⭐ 오른쪽 여유 확보 */
+    font-size: 14px;
+    line-height: 32px;               /* ⭐ 세로 중앙 정렬 */
+    color: #6D7882;
+    background: #fff
+    url(../img/ico_sch_arr.svg)
+    no-repeat center right 10px; /* ⭐ 화살표 위치 */
+    border: 1px solid #61758F;
+    border-radius: 4px;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}select:disabled {filter: contrast(0.5);}
 
 /* chk&rdo */
 :where(input[type="checkbox"], input[type="radio"]) {display: none;}
@@ -165,14 +180,13 @@ input[type="radio"]:checked + label::before {outline: 1px solid #346FB2; border:
     text-align: center;
 }
 
-.course-table th:last-child,
-.course-table td:last-child {
-    width: 100px;        /* ← 여기 조절 (60~90 추천) */
-    min-width: 100px;
-    max-width: 100px;
+.future-table th:nth-child(3),
+.future-table td:nth-child(3) {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
     text-align: center;
 }
-
 /* 체크박스 + label 가운데 정렬 */
 .course-table td:first-child label {
     display: inline-flex;
@@ -201,3 +215,10 @@ input[type="radio"]:checked + label::before {outline: 1px solid #346FB2; border:
     border-radius: 30px;
 }
 .list table td {text-align: left;}
+
+.prev-table th:nth-child(2){text-align: center;}
+.prev-table td:nth-child(2) {
+    width: auto;
+    text-align: left;
+    padding-left: 12px;
+}
