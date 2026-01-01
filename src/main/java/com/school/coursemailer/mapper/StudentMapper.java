@@ -12,4 +12,6 @@ public interface StudentMapper {
     void insertStudent(Map<String, Object> param);
 
     void updateStudent(Map<String, Object> map);
+
+    Map<String, String> selectUserMap(String sub);
 }

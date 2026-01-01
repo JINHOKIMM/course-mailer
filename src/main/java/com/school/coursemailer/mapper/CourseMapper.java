@@ -7,5 +7,13 @@ import java.util.Map;
 
 @Mapper
 public interface CourseMapper {
-    List<Map<String, String>> selectCourseCond(String sub);
+    List<Map<String, String>> selectCourseList(Map<String,String> userMap);
+
+    List<Map<String, String>> selectMyCourse(Map<String, String> userMap);
+
+    void insertMyCourse(Map<String, String> userMap);
+
+    void deleteMyCourse(Map<String, String> userMap);
+
+    //void updateMyCourse(Map<String, String> userMap);
 }

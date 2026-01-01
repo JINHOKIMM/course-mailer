@@ -43,4 +43,10 @@ public class StudentService {
         map.put("grade",grade);
         studentMapper.updateStudent(map);
     }
+
+    public Map<String,String> selectUserMap(String sub) {
+        Map<String,Object> map = new HashMap<>();
+        return studentMapper.selectUserMap(sub);
+    }
+
 }

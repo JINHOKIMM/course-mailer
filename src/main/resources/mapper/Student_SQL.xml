@@ -69,4 +69,18 @@
         WHERE sub = #{sub}
     </update>
 
+    <select id="selectUserMap" parameterType="String" resultType="Map">
+        SELECT student_id
+             ,google_email
+             ,name
+             ,created_at
+             ,picture
+             ,email_verified
+             ,given_name
+             ,sub,grade
+             ,mail_YN
+        FROM student
+        WHERE sub = #{sub}
+    </select>
+
 </mapper>
