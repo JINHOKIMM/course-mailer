@@ -15,5 +15,7 @@ public interface CourseMapper {
 
     void deleteMyCourse(Map<String, String> userMap);
 
+    List<Map<String, String>> selectMyFutureCourse(Map<String, String> userMap);
+
     //void updateMyCourse(Map<String, String> userMap);
 }

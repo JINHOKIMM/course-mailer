@@ -12,8 +12,8 @@
         FROM course_cd_tb cct
         LEFT JOIN course_grade_condition cgc
         ON cct.course_id = cgc.course_id
+        <!--
         <where>
-            <!-- grade가 있을 때만 학년 조건 적용 -->
             <if test="grade != null">
                 AND (
                 cgc.course_id IS NULL
@@ -21,6 +21,7 @@
                 )
             </if>
         </where>
+        -->
         ORDER BY cct.course_id
     </select>
 
@@ -34,7 +35,7 @@
         FROM
             student_course
         WHERE
-            student_id = #{student_id}
+            student_id = #{student_id}::VARCHAR
     </select>
 
     <insert id="insertMyCourse" parameterType="map">
@@ -68,4 +69,23 @@
 
     </update>
 
+    <select id="selectMyFutureCourse" parameterType="map" resultType="map">
+        SELECT
+            sc.id
+            ,sc.student_id
+            ,sc.course_id
+            ,sc.period
+            ,sc.status
+            ,cct.course_name
+        FROM
+            student_course sc left join course_cd_tb cct on sc.course_id = cct.course_id
+        where
+            status = 'O' and student_id = #{student_id}::VARCHAR
+    </select>
+
+
+
 </mapper>
+
+
+

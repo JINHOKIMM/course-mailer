@@ -73,4 +73,14 @@ public class CourseApiController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/myFutureCourse")
+    public ResponseEntity<?> selectMyFutureCourse(@AuthenticationPrincipal OAuth2User user) {
+        Map<String,String> userMap = requireLogin(user);
+
+        // 비즈니스 로직은 서비스로
+        return ResponseEntity.ok(
+                courseService.selectMyFutureCourse(userMap)
+        );
+    }
+
 }

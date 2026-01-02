@@ -60,18 +60,36 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <c:forEach begin="0" end="4" var="i">
-                        <td>
-                            <p>Course name Course name</p>
-                            <div class="btn-wrap">
-                                <button type="button"
-                                        class="btn accordion drop-btn"
-                                        data-index="${i}">
-                                    Drop
-                                </button>
-                            </div>
-                        </td>
-                    </c:forEach>
+                    <td data-period="A">
+                        <p class="top-course-name">-</p>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn accordion drop-btn" data-period="A">Drop</button>
+                        </div>
+                    </td>
+                    <td data-period="B">
+                        <p class="top-course-name">-</p>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn accordion drop-btn" data-period="B">Drop</button>
+                        </div>
+                    </td>
+                    <td data-period="C">
+                        <p class="top-course-name">-</p>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn accordion drop-btn" data-period="C">Drop</button>
+                        </div>
+                    </td>
+                    <td data-period="D">
+                        <p class="top-course-name">-</p>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn accordion drop-btn" data-period="D">Drop</button>
+                        </div>
+                    </td>
+                    <td data-period="E">
+                        <p class="top-course-name">-</p>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn accordion drop-btn" data-period="E">Drop</button>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -81,7 +99,9 @@
         <div class="tabCont">
             <c:forEach var="i" begin="0" end="4">
                 <!-- 🔽 하단 리스트 하나 -->
-                <div class="tblBox col bottom-list" data-index="${i}" style="display:none;">
+                <div class="tblBox col bottom-list"
+                     data-period="${'ABCDE'.charAt(i)}"
+                     style="display:none;">
                     <table class="tbl">
                         <colgroup>
                             <col style="width:60%">
@@ -124,25 +144,39 @@
 </div>
 <script>
     $(function () {
-
-        // 🔽 Drop 버튼 클릭
-        $(".drop-btn").on("click", function () {
-            const index = $(this).data("index");
-
-            // 모든 하단 리스트 숨김
-            $(".bottom-list").hide();
-
-            // 해당 index만 표시
-            $(".bottom-list[data-index='" + index + "']")
-                .fadeIn(300);
-
-            // 상단 선택 효과
-            $(".drop-btn").removeClass("active");
-            $(this).addClass("active");
-        });
-
+        selectMyCourse();
     });
 
+    function selectMyCourse() {
+        $.ajax({
+            url: "/course/myFutureCourse",
+            type: "GET",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (res) {
+
+                // 초기화
+                $(".top-course-name").text("-");
+
+                // period 기준으로 상단 채우기
+                res.forEach(function (item) {
+                    console.log(item);
+                    const period = item.period;          // A/B/C/D/E
+                    const courseName = item.course_name;
+
+                    $("td[data-period='" + period + "']")
+                        .find(".top-course-name")
+                        .text(courseName);
+                });
+            },
+            error: function () {
+                alert("내 수업 정보를 불러오지 못했습니다.");
+            }
+        });
+    }
+
+    /*
     function sendMail() {
         $.ajax({
             url: "/mail/send",
@@ -162,7 +196,21 @@
             }
         });
     }
+    */
 
+    $(".drop-btn").on("click", function () {
+        const period = $(this).data("period");
+
+        // 모든 하단 리스트 숨김
+        $(".bottom-list").hide();
+
+        // 해당 period 리스트만 표시
+        $(".bottom-list[data-period='" + period + "']").fadeIn(300);
+
+        // 버튼 active 처리
+        $(".drop-btn").removeClass("active");
+        $(this).addClass("active");
+    });
 </script>
 </body>
 </html>

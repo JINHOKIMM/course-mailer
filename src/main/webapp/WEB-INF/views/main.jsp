@@ -123,7 +123,7 @@
             </ul>
 
             <div class="btn-wrap">
-                <button type="button" class="btn pt" onclick="location.href='/sub'">Next</button>
+                <button type="button" class="btn pt" onclick="nextPage();">Next</button>
             </div>
         </div>
     </div>
@@ -538,6 +538,28 @@
         $tbody.find("select").each(function () {
             $(this).val("");
             $(this).prop("disabled", true);
+        });
+    }
+
+    function nextPage(){
+        $.ajax({
+            url: "/course/myCourse",
+            type: "GET",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (res) {
+                let futureCnt = 0;
+                res.forEach(myCourse => {
+                    console.log(myCourse);
+                    if(myCourse.status === 'O') futureCnt++;
+                });
+                if(futureCnt === 5) location.href = "/sub";
+                else alert("future course를 5개 선택해주세요.");
+            },
+            error: function (xhr) {
+                alert("내 수업 정보를 불러오지 못했습니다.");
+            }
         });
     }
 

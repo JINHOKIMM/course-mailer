@@ -53,4 +53,8 @@ public class CourseService {
             log.info("course === {}", course);
         }
     }
+
+    public List<Map<String, String>> selectMyFutureCourse(Map<String, String> userMap) {
+        return courseMapper.selectMyFutureCourse(userMap);
+    }
 }
