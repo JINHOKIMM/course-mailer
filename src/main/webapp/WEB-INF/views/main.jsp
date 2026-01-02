@@ -28,13 +28,16 @@
     <!-- header -->
     <div id="header" class="header">
         <h1 class="logo">
-            <a href="#">St. Johnsbury Academy Jeju</a>
+            <a href="/main">St. Johnsbury Academy Jeju</a>
         </h1>
         <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
 
         <div class="userBox">
             <ul>
-                <li><button type="button" class="logout">sign out</button></li>
+                <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
+            </ul>
+            <ul>
+                <li><button type="button" onclick="location.href='/mailHistory';" class="logout">history</button></li>
             </ul>
         </div>
     </div>
@@ -123,7 +126,7 @@
             </ul>
 
             <div class="btn-wrap">
-                <button type="button" class="btn pt" onclick="location.href='/sub'">Next</button>
+                <button type="button" class="btn pt" onclick="nextPage();">Next</button>
             </div>
         </div>
     </div>
@@ -385,6 +388,7 @@
             },
             error: function (xhr) {
                 alert("내 수업 정보를 불러오지 못했습니다.");
+                location.href="/login";
             }
         });
     }
@@ -538,6 +542,28 @@
         $tbody.find("select").each(function () {
             $(this).val("");
             $(this).prop("disabled", true);
+        });
+    }
+
+    function nextPage(){
+        $.ajax({
+            url: "/course/myCourse",
+            type: "GET",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (res) {
+                let futureCnt = 0;
+                res.forEach(myCourse => {
+                    console.log(myCourse);
+                    if(myCourse.status === 'O') futureCnt++;
+                });
+                if(futureCnt === 5) location.href = "/sub";
+                else alert("future course를 5개 선택해주세요.");
+            },
+            error: function (xhr) {
+                alert("내 수업 정보를 불러오지 못했습니다.");
+            }
         });
     }
 

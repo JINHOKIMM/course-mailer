@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.coursemailer.mapper.MailMapper">
+    <insert id="insertMailSeq" parameterType="map">
+        INSERT INTO mail (
+        student_id,
+        title,
+        receiver_email,
+        content
+        ) VALUES (
+        #{student_id},
+        #{title},
+        #{receiver_email},
+        #{content}
+        )
+        <selectKey keyProperty="mail_seq" resultType="int" order="AFTER">
+            SELECT currval(pg_get_serial_sequence('mail','mail_seq'))
+        </selectKey>
+    </insert>
+
+    <select id="selectMailHistory" parameterType="Map" resultType="Map">
+        SELECT
+            m.mail_seq
+            ,m.student_id
+            ,m.title
+            ,m.receiver_email
+            ,m.content
+            ,m.sent_at
+            ,s.google_email
+        FROM
+            mail m left join student s on m.student_id = s.student_id
+        <where>
+            <if test="admin == null">
+                student_id = #{student_id}
+            </if>
+        </where>
+        ORDER BY sent_at DESC
+    </select>
+</mapper>
+
+
+

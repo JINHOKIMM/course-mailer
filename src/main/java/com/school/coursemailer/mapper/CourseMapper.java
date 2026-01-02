@@ -15,5 +15,21 @@ public interface CourseMapper {
 
     void deleteMyCourse(Map<String, String> userMap);
 
+    List<Map<String, String>> selectMyFutureCourse(Map<String, String> userMap);
+
+    List<Map<String, String>> selectAvailableCourseList(Map<String, String> userMap);
+
+    String selectCourseId(Map<String, String> userMap);
+
+    void student_cntUp(Map<String, String> map);
+
+    void student_cntDown(Map<String, String> map);
+
+    boolean isPossibleSwap(Map<String, String> userMap);
+
+    void updatePeriodCourse(Map<String, String> param);
+
+    String selectStudentCourseId(Map<String, String> userMap);
+
     //void updateMyCourse(Map<String, String> userMap);
 }

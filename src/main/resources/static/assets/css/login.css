@@ -197,3 +197,35 @@ input{
 .link:hover{ text-decoration: underline; }
 
 .muted{ color: var(--muted); }
+
+
+.loading-dim {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-box {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.loading-box img {
+    width: 120px;
+    margin-bottom: 15px;
+}
+
+.loading-box p {
+    font-size: 14px;
+    color: #063A74;
+    font-weight: 500;
+}

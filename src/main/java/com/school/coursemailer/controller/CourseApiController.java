@@ -73,4 +73,37 @@ public class CourseApiController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/myFutureCourse")
+    public ResponseEntity<?> selectMyFutureCourse(@AuthenticationPrincipal OAuth2User user) {
+        Map<String,String> userMap = requireLogin(user);
+
+        // 비즈니스 로직은 서비스로
+        return ResponseEntity.ok(
+                courseService.selectMyFutureCourse(userMap)
+        );
+    }
+
+    @GetMapping("/availableCourseList")
+    public ResponseEntity<?> selectAvailableCourseList(@AuthenticationPrincipal OAuth2User user, @RequestParam String period) {
+        Map<String,String> userMap = requireLogin(user);
+
+        // 비즈니스 로직은 서비스로
+        return ResponseEntity.ok(
+                courseService.selectAvailableCourseList(userMap,period)
+        );
+    }
+
+    @PutMapping("/swap")
+    public ResponseEntity<?> updateMyPeriod(@AuthenticationPrincipal OAuth2User user, @RequestParam String period,
+                                            @RequestParam("course_id") String courseId,@RequestParam String room) {
+        Map<String,String> userMap = requireLogin(user);
+        userMap.put("period",period);
+        userMap.put("course_id",courseId);
+        userMap.put("room",room);
+
+        return ResponseEntity.ok(
+                courseService.updateMyPeriod(userMap)
+        );
+    }
+
 }
