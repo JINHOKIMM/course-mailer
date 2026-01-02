@@ -81,7 +81,7 @@ input[type="radio"]:checked + label::before {outline: 1px solid #346FB2; border:
 .list .btn-wrap {margin-top: 30px;}
 
 /* popup */
-.popup {z-index: 2; position: fixed; top: 50%; left: 50%; display: flex; flex-direction: column; gap: 20px; width: 500px; height: 360px; padding: 40px 60px; background: #fff; border: 1px solid #B1B8BE; border-radius: 12px; transform: translateY(-50%) translateX(-50%);}
+.popup {z-index: 2; position: fixed; top: 50%; left: 50%; display: flex; flex-direction: column; gap: 20px; width: 500px; height: 360px; padding: 40px 30px; background: #fff; border: 1px solid #B1B8BE; border-radius: 12px; transform: translateY(-50%) translateX(-50%);}
 .popup p {text-align: center; font-size: 14px; font-weight: 400; line-height: 1.5; color: #346FB2;}
 .popup .tit {font-size: 20px; font-weight: 700; color: #063A74;}
 .popup .sub {font-size: 12px; color: #464C53;}
@@ -221,4 +221,176 @@ input[type="radio"]:checked + label::before {outline: 1px solid #346FB2; border:
     width: auto;
     text-align: left;
     padding-left: 12px;
+}
+
+/* 260102 */
+.send {display: flex; flex-direction: column;}
+.send .tit {margin-bottom: 5px; font-size: 20px; font-weight: 700; color: #063A74; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.send .sub {margin-bottom: 10px; font-size: 14px; font-weight: 500; color: #346FB2; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.send p {display: block; text-align: left; font-size: 12px; font-weight: 400; line-height: 1.5; color: #464C53;}
+.send .txtBox {display: block; height: 150px; padding: 10px 15px; max-height: 150px; background-color: rgba(59, 59, 59, 0.1);border: 1px solid rgba(118, 118, 118, 0.2); border-radius: 6px; overflow-y: auto;}
+.send .btn-wrap {margin-top: 25px;}
+
+.top-course-name {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.4;
+}
+
+/* td 전체를 잠금 상태로 보이게 */
+td.locked {
+    position: relative;
+}
+
+/* 회색 오버레이 */
+td.locked::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(210, 210, 210, 0.85); /* 배경과 확실히 구분 */
+    z-index: 1;
+    pointer-events: all; /* 클릭 차단 */
+}
+
+/* td 안 실제 콘텐츠는 오버레이 위로 못 오게 */
+td.locked .top-course-name,
+td.locked .btn-wrap {
+    position: relative;
+    z-index: 2;
+}
+
+/* 과목명은 보이되 비활성 느낌 */
+td.locked .top-course-name {
+    color: #666;
+    font-weight: 500;
+}
+
+/* 버튼 비활성 */
+td.locked .drop-btn {
+    background-color: #cfcfcf;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* 잠금 표시 */
+td.locked::after {
+    content: "LOCKED";
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    z-index: 3;
+}
+
+/* 선택된 period */
+td.period-active {
+    background-color: #eef4ff;
+    border: 2px solid #4a6cf7;
+}
+
+/* 다른 period 흐리게 */
+td.period-dim {
+    opacity: 0.4;
+}
+
+/* Drop 버튼 active */
+.drop-btn.active {
+    background-color: #4a6cf7;
+    color: #fff;
+}
+
+/* 정원 가득 찬 row */
+.row-full {
+    opacity: 0.5;
+}
+
+/* Swap 불가 버튼 */
+.swap-btn.disabled {
+    cursor: not-allowed;
+    background-color: #aaa;
+}
+
+/* 마우스 올려도 반응 없게 */
+.swap-btn.disabled:hover {
+    background-color: #aaa;
+}
+
+/* 위에서 빠지는 느낌 */
+.swap-out {
+    animation: swapOut 0.4s ease forwards;
+}
+
+/* 아래서 올라오는 느낌 */
+.swap-in {
+    animation: swapIn 0.4s ease forwards;
+}
+
+@keyframes swapOut {
+    0%   { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-20px); opacity: 0; }
+}
+
+@keyframes swapIn {
+    0%   { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* 팝업 X 닫기 버튼 */
+.popup .popup-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    font-weight: 600;
+    color: #6D7882;
+    cursor: pointer;
+}
+
+.popup .popup-close:hover {
+    color: #063A74;
+}
+
+.send .txtBox textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    resize: none;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #464C53;
+    outline: none;
+}
+
+/* 전체 화면 딤 */
+.loading-dim{
+    position: fixed;          /* 화면 기준 */
+    inset: 0;                 /* top/right/bottom/left:0 */
+    background: rgba(0,0,0,0.35);
+    z-index: 9999;
+
+    display: none;            /* 기본 숨김 */
+    justify-content: center;  /* 가로 가운데 */
+    align-items: center;      /* 세로 가운데 */
+}
+
+/* 로딩 박스 */
+.loading-dim .loading-box{
+    background: #fff;
+    padding: 18px 22px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.loading-dim .loading-box img{
+    width: 120px; /* 필요시 조절 */
+    height: auto;
+    display: block;
+    margin: 0 auto 10px;
 }

@@ -16,7 +16,7 @@
             ,given_name
             ,sub
             ,grade
-            ,mail_YN
+            ,mail_seq
         FROM student
         WHERE sub = #{sub}
     </select>
@@ -60,13 +60,13 @@
                 given_name = #{given_name},
             </if>
             <if test="grade != null">
-                grade = #{grade},
+                grade = #{grade}::integer,
             </if>
-            <if test="mail_YN != null">
-                mail_YN = #{mail_YN},
+            <if test="mail_seq != null">
+                mail_seq = #{mail_seq}::integer,
             </if>
         </set>
-        WHERE sub = #{sub}
+        WHERE sub = #{sub}::varchar
     </update>
 
     <select id="selectUserMap" parameterType="String" resultType="Map">
@@ -78,7 +78,7 @@
              ,email_verified
              ,given_name
              ,sub,grade
-             ,mail_YN
+             ,mail_seq
         FROM student
         WHERE sub = #{sub}
     </select>

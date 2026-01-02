@@ -31,4 +31,9 @@ public class HomeController {
     public String sub() {
         return "sub";
     }
+
+    @GetMapping("/mailHistory")
+    public String mailHistory() {
+        return "mailHistory";
+    }
 }
