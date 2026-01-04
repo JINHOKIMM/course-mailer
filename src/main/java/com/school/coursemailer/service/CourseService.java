@@ -14,6 +14,7 @@ import java.util.Map;
 @Service
 public class CourseService {
     private final CourseMapper courseMapper;
+
     public CourseService(CourseMapper courseMapper) {
         this.courseMapper = courseMapper;
     }
