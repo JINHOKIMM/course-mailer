@@ -12,3 +12,5 @@
 # OS
 .DS_Store
 Thumbs.db
+
+echo src/main/resources/application.yaml
