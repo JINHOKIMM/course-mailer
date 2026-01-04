@@ -35,7 +35,7 @@
         FROM
             student_course
         WHERE
-            student_id = #{student_id}::integer
+            student_id = #{student_id}
     </select>
 
     <insert id="insertMyCourse" parameterType="map">
@@ -46,8 +46,8 @@
             ,status)
         VALUES
             (
-            #{student_id}::integer
-            ,#{course_id}::integer
+            #{student_id}
+            ,#{course_id}
             ,#{period}
             ,#{status}
             )
@@ -55,143 +55,18 @@
 
     <delete id="deleteMyCourse" parameterType="map">
         DELETE FROM student_course
-        WHERE student_id = #{student_id}::integer  AND  status = #{status}
+        WHERE student_id = #{student_id} AND  status = #{status}
     </delete>
 
-
-    <select id="selectMyFutureCourse" parameterType="map" resultType="map">
-        SELECT
-            sc.id
-            ,sc.student_id
-            ,sc.course_id
-            ,sc.period
-            ,sc.status
-            ,cct.course_name
-            ,cct.lock_yn
-        FROM
-            student_course sc left join course_cd_tb cct on sc.course_id = cct.course_id
-        where
-            status = 'O' and student_id = #{student_id}::integer
-    </select>
-
-    <select id="selectAvailableCourseList" parameterType="map" resultType="map">
-        SELECT
-        c.course_seq,
-        c.course_code,
-        c.course_name,
-        substring(c.period,1,1) as period,
-        c.room,
-        c.student_count,
-        c.max_seats
-        FROM course c
-        WHERE substring(c.period,1,1) = #{period}
-        <if test="grade != null">
-            AND (
-                NOT EXISTS (
-                SELECT 1
-                FROM course_grade_condition g
-                WHERE g.course_id = c.course_code
-                 )
-            OR EXISTS (
-                SELECT 1
-                FROM course_grade_condition g
-                WHERE g.course_id = c.course_code
-                AND #{grade}::integer BETWEEN g.min_grade AND g.max_grade
-                )
-            )
-        </if>
-        AND (
-            NOT EXISTS (
-                SELECT 1
-                FROM course_condition_group cg
-                WHERE cg.target_course_code = c.course_code
-                        )
-            OR EXISTS (
-                SELECT 1
-                FROM course_condition_group cg
-                WHERE cg.target_course_code = c.course_code
-                AND NOT EXISTS (
-                    SELECT 1
-                    FROM course_condition_item ci
-                    WHERE ci.group_id = cg.id
-                    AND NOT EXISTS (
-                        SELECT 1
-                        FROM student_course sc
-                        WHERE sc.student_id = #{student_id}::integer
-                        AND sc.course_id = ci.required_course_code
-                        AND sc.status = 'X'
-                                    )
-                                )
-                        )
-            )
-        ORDER BY c.course_code
-    </select>
-
-    <select id="selectCourseId" parameterType="Map" resultType="String">
-        SELECT
-            course_id
-        FROM
-            student_course
-        WHERE
-            student_id = #{student_id}::integer
-            AND period = #{period}
-    </select>
-
-    <update id="student_cntDown" parameterType="Map">
-        UPDATE course
-        SET
-            student_count = student_count - 1
-        WHERE
-            course_code = #{course_id}::integer
-            AND substring(period,1,1) = #{period}
-            AND room = #{room}
-    </update>
-
-    <update id="student_cntUp" parameterType="Map">
-        UPDATE course
-        SET
-            student_count = student_count + 1
-        WHERE
-            course_code = #{course_id}::integer
-            AND substring(period,1,1) = #{period}
-            AND room = #{room}
-    </update>
-
-    <select id="isPossibleSwap" parameterType="map" resultType="boolean">
-        SELECT
-            CASE
-                WHEN (max_seats - student_count) > 0 THEN TRUE
-                ELSE FALSE
-                END
-        FROM course
-        WHERE
-            course_code = #{course_id}::integer
-            AND substring(period,1,1) = #{period}
-            AND room = #{room}
-
-    </select>
-
-    <select id="selectStudentCourseId" parameterType="Map" resultType="String">
-        SELECT
-            id
-        FROM
-            student_course
-        WHERE
-            student_id = #{student_id}::integer
-            AND period = #{period}
-    </select>
-
-    <update id="updatePeriodCourse" parameterType="Map">
+    <update id="updateMyCourse" parameterType="map">
         UPDATE student_course
             SET
-                course_id = #{nextCourseId}::integer
+                student_id
+                ,course_id
+                ,period
+                ,status
             WHERE
-                id = #{id}::integer
 
     </update>
 
-
 </mapper>
-
-
-
