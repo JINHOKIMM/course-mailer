@@ -34,7 +34,7 @@
             mail m left join student s on m.student_id = s.student_id
         <where>
             <if test="admin == null">
-                student_id = #{student_id}
+                m.student_id = #{student_id}::integer
             </if>
         </where>
         ORDER BY sent_at DESC

@@ -59,4 +59,14 @@ public class MailApiController {
         );
     }
 
+    @PostMapping("/graduateMailSend")
+    public ResponseEntity<?> graduateMailSend(@AuthenticationPrincipal OAuth2User user) {
+        Map<String,String> userMap = requireLogin(user);
+
+        mailService.graduateMailSend(userMap);
+
+        return ResponseEntity.ok(
+                Map.of("success", true)
+        );
+    }
 }

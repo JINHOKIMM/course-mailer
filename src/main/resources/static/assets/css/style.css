@@ -186,6 +186,16 @@ input[type="radio"]:checked + label::before {outline: 1px solid #346FB2; border:
     min-width: 150px;
     max-width: 150px;
     text-align: center;
+    white-space: nowrap;
+}
+
+/* period(select) 컬럼 */
+.future-table th:nth-child(4),
+.future-table td:nth-child(4) {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    text-align: center;
 }
 /* 체크박스 + label 가운데 정렬 */
 .course-table td:first-child label {
@@ -393,4 +403,62 @@ td.period-dim {
     height: auto;
     display: block;
     margin: 0 auto 10px;
+}
+
+.section-head {
+    margin: 40px 0 12px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #052B57;
+    margin-bottom: 4px;
+}
+
+.section-desc {
+    font-size: 14px;
+    color: #6D7882;
+    line-height: 1.4;
+}
+
+.planned-table {
+    opacity: 0.85;
+}
+
+.planned-table td {
+    background-color: #F7F9FB;
+}
+
+.final-table {
+    border-top: 2px solid #337AC6;
+}
+
+.planned-table + .final-table {
+    margin-top: 30px;
+}
+
+/* =========================
+   Grade 전용 Dim (강제)
+   ========================= */
+.grade-dim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55); /* ← 충분히 어둡게 */
+    z-index: 9000;
+
+    display: none;
+
+    /* ⭐⭐⭐ 핵심 */
+    pointer-events: all;   /* 클릭 이벤트 가로챔 */
+}
+
+/* Grade 전용 Popup */
+.grade-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 9001; /* dim 위 */
 }

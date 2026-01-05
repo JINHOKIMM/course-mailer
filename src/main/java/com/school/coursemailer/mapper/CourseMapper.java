@@ -7,7 +7,9 @@ import java.util.Map;
 
 @Mapper
 public interface CourseMapper {
-    List<Map<String, String>> selectCourseList(Map<String,String> userMap);
+    List<Map<String, String>> selectCourseList1();
+
+    List<Map<String, String>> selectCourseList2();
 
     List<Map<String, String>> selectMyCourse(Map<String, String> userMap);
 

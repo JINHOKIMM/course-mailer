@@ -111,6 +111,7 @@
                             <tr>
                                 <th>Check</th>
                                 <th>Course</th>
+                                <th>Room</th>
                                 <th>period</th>
                             </tr>
                             </thead>
@@ -131,20 +132,27 @@
         </div>
     </div>
     <!-- //container -->
-
+    <div class="grade-dim" style="display:none;"></div>
     <!-- popup -->
-    <div class="popup" style="display: none;">
+    <div class="popup grade-popup" style="display: none;">
         <p class="tit">Are you changing your class schedule<br>because of graduation credits?</p>
         <p>If you select "Yes," an email will be sent to your<br>counselor, and you'll just need to have a meeting.<br>If you select "No," you'll be redirected to the schedule<br>change website.</p>
         <div class="btn-wrap">
-            <button type="button" class="btn pt">Yes</button>
-            <button type="button" class="btn gray">No</button>
+            <button type="button" class="btn pt" onclick="onGradeYes()">Yes</button>
+            <button type="button" class="btn gray" onclick="onGradeNo()">No</button>
         </div>
         <p class="sub">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
     </div>
 
+    <div class="loading-dim" style="display:none;">
+        <div class="loading-box">
+            <img src="/assets/img/mailSending.gif" alt="sending mail">
+            <p>메일을 발송중입니다...</p>
+        </div>
+    </div>
+
 </div>
-<div class="dim"></div>
+
 <script>
     $(function () {
         loginChk();
@@ -167,15 +175,24 @@
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");
 
+                debugger;
                 // ✅ grade 라디오 체크 동기화
-                if (user.grade) {
+                if (user.grade === 13) {
+                    alert(
+                        "An email regarding your course change due to graduation credit requirements has already been sent."
+                    );
+                    location.href = "/mailHistory";
+                }
+                else if (user.grade >= '9' && user.grade <= '12') {
                     const gradeText = user.grade + "th Grade";
 
                     $("input[name='grade']").prop("checked", false);
                     $("input[name='grade'][value='" + gradeText + "']").prop("checked", true);
-                } else {
+                }
+                else {
                     openGradeModal();
                 }
+
                 selectCourseList();
             },
             error: function(xhr) {
@@ -190,26 +207,47 @@
     }
 
     function selectCourseList() {
+        loadPrevCourseList();
+        loadFutureCourseList();
+    }
+
+    function loadPrevCourseList() {
         $.ajax({
-            url: "/course/courseList",
+            url: "/course/courseList1",
             type: "GET",
             xhrFields: { withCredentials: true },
             success: function(res) {
                 const $prev = $("#prevCourseBody");
-                const $future = $("#futureCourseBody");
-
                 $prev.empty();
-                $future.empty();
 
                 res.forEach(course => {
                     $prev.append(createCourseRow(course, "prev"));
+                });
+            },
+            error: function() {
+                alert("이전 수업 목록을 불러오지 못했습니다.");
+            }
+        });
+    }
+
+    function loadFutureCourseList() {
+        $.ajax({
+            url: "/course/courseList2",
+            type: "GET",
+            xhrFields: { withCredentials: true },
+            success: function(res) {
+                const $future = $("#futureCourseBody");
+                $future.empty();
+
+                res.forEach(course => {
                     $future.append(createCourseRow(course, "future"));
                 });
 
+                // 기존 로직 유지
                 selectMyCourse();
             },
-            error: function(xhr) {
-                alert("수업 조건을 불러오지 못했습니다.");
+            error: function() {
+                alert("신청 가능 수업 목록을 불러오지 못했습니다.");
             }
         });
     }
@@ -239,6 +277,13 @@
 
         // ✅ 이후 과목일 때만 period 컬럼 생성
         if (prefix === "future") {
+
+            /* ===== room 컬럼 ===== */
+            const tdRoom = document.createElement("td");
+            tdRoom.textContent = course.room || "-";
+            tr.append(tdRoom);
+
+            /* ===== period 컬럼 ===== */
             const tdPeriod = document.createElement("td");
             const select = document.createElement("select");
 
@@ -261,7 +306,10 @@
             tdPeriod.appendChild(select);
             tr.append(tdPeriod);
 
-            // 체크박스 ↔ select 연동
+            /* ===== 데이터 보관 (핵심) ===== */
+            tr.dataset.room = course.room || "";
+
+            /* ===== checkbox ↔ period 연동 ===== */
             checkbox.addEventListener("change", function () {
                 if (this.checked) {
                     select.disabled = false;
@@ -271,7 +319,6 @@
                 }
             });
         }
-
         return tr;
     }
 
@@ -313,11 +360,15 @@
     }
 
     function openGradeModal() {
-        $(".popup-wrap").fadeIn(200);
+        $('.grade-dim').fadeIn(200);     // ✅
+        $('.grade-popup').fadeIn(200);   // ✅
+        $('body').addClass('lock');
     }
 
     function closeGradeModal() {
-        $(".popup-wrap").fadeOut(200);
+        $('.grade-popup').fadeOut(200);
+        $('.grade-dim').fadeOut(200);
+        $('body').removeClass('lock');
     }
 
     function escapeHtml(str) {
@@ -424,14 +475,17 @@
                 const id = $checkbox.attr("id");
                 const courseId = id.replace(prefix, "");
 
-                const $select = $checkbox.closest("tr").find("select");
-                const period = $select.val();
+                const $tr = $checkbox.closest("tr");
+                const courseName = $tr.find("td:nth-child(2)").text().trim();
+                const room = $tr.data("room");
+                const period = $tr.find("select").val();
 
-                // 2️⃣ period 선택 여부
-                if (!period) {
-                    alert("선택한 과목의 period를 모두 선택해주세요.");
-                    return;
-                }
+                // 콘솔 출력 🔥
+                console.log("체크박스 ID:", id);
+                console.log("과목 ID:", courseId);
+                console.log("과목명:", courseName);
+                console.log("room:", room);
+                console.log("period:", period);
 
                 // 3️⃣ period 중복 검사
                 if (usedPeriods.has(period)) {
@@ -444,6 +498,7 @@
                 courseList.push({
                     course_id: courseId,
                     period: period,
+                    room: room,
                     status: status
                 });
             }
@@ -567,6 +622,43 @@
         });
     }
 
+    $('.grade-dim').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    $(document).on("keydown", function (e) {
+        if ($(".grade-popup:visible").length && e.key === "Escape") {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    function onGradeYes() {
+        $.ajax({
+            url: "/mail/graduateMailSend",
+            type: "POST",
+            xhrFields: {
+                withCredentials: true   // 로그인 세션 유지
+            },
+            beforeSend: function () {
+                $(".loading-dim").css("display", "flex").hide().fadeIn(200);
+            },
+            success: function () {
+                alert("메일을 전송했습니다.");
+                location.href = "/mailHistory";
+            },
+            error: function (xhr) {
+                alert("에러: " + (xhr.responseText || xhr.status));
+            },
+            complete: function () {
+                $(".loading-dim").fadeOut(200);
+            }
+        });
+    }
+
+    function onGradeNo() {
+        closeGradeModal();
+    }
 
 </script>
 </body>
