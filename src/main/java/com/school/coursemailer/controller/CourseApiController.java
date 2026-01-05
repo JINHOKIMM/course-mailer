@@ -44,14 +44,24 @@ public class CourseApiController {
     }
 
 
-    @GetMapping("/courseList")
-    public ResponseEntity<?> selectCourseList(@AuthenticationPrincipal OAuth2User user) {
-        log.info("=== 메인화면 List 가져오기  ===");
+    @GetMapping("/courseList1")
+    public ResponseEntity<?> selectCourseList1(@AuthenticationPrincipal OAuth2User user) {
         Map<String,String> userMap = requireLogin(user);
 
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
-                courseService.selectCourseList(userMap)
+                courseService.selectCourseList1()
+        );
+    }
+
+    @GetMapping("/courseList2")
+    public ResponseEntity<?> selectCourseList2(@AuthenticationPrincipal OAuth2User user) {
+
+        Map<String,String> userMap = requireLogin(user);
+
+        // 비즈니스 로직은 서비스로
+        return ResponseEntity.ok(
+                courseService.selectCourseList2()
         );
     }
 

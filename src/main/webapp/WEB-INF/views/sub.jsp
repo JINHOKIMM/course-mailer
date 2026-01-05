@@ -34,9 +34,7 @@
         <div class="userBox">
             <ul>
                 <li><button type="button" class="logout">sign out</button></li>
-            </ul>
-            <ul>
-                <li><button type="button" class="logout">history/button></li>
+                <li><button type="button" class="logout">history</button></li>
             </ul>
         </div>
     </div>
@@ -44,9 +42,52 @@
 
     <!-- container -->
     <div id="container" class="container">
+        <div class="section-head">
+            <h3 class="section-title">Planned Courses for Next Semester</h3>
+            <p class="section-desc">
+                Courses you planned to take next semester. This section is read-only.
+            </p>
+        </div>
 
+        <div class="tblBox col planned-table">
+            <table class="tbl blue">
+                <colgroup>
+                    <col style="width:20%">
+                    <col style="width:20%">
+                    <col style="width:20%">
+                    <col style="width:20%">
+                    <col style="width:20%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td data-period="A"><p class="top-course-name">-</p></td>
+                    <td data-period="B"><p class="top-course-name">-</p></td>
+                    <td data-period="C"><p class="top-course-name">-</p></td>
+                    <td data-period="D"><p class="top-course-name">-</p></td>
+                    <td data-period="E"><p class="top-course-name">-</p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <!-- 상단 테이블 -->
-        <div class="tblBox col">
+        <div class="section-head">
+            <h3 class="section-title">Final Course Selection</h3>
+            <p class="section-desc">
+                These courses will be included in the confirmation email.
+                You may change courses below.
+            </p>
+        </div>
+
+        <div class="tblBox col final-table">
             <table class="tbl blue">
                 <colgroup>
                     <col style="width:20%">
@@ -126,22 +167,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="j" begin="1" end="6">
-                            <tr>
-                                <td class="tL">Course ${i}-${j}</td>
-                                <td class="sub">2025.06.11</td>
-                                <td>
-                                    <button type="button" class="btn blue swap-btn">
-                                        Swap
-                                    </button>
-                                </td>
-                            </tr>
-                        </c:forEach>
+
                         </tbody>
                     </table>
                 </div>
             </c:forEach>
-
         </div>
 
         <div class="btn-wrap">
@@ -150,7 +180,7 @@
 
     </div>
     <!-- //container -->
-    <<div class="popup-overlay" style="display:none;"></div>
+    <div class="popup-overlay" style="display:none;"></div>
 
     <!-- 팝업 -->
     <div class="dim"></div>
@@ -308,7 +338,8 @@
                         + "    <button type='button' class='" + btnClass + "'"
                         + disabledAttr
                         + "            data-course-code='" + item.course_code + "'"
-                        + "            data-period='" + period + "'>"
+                        + "            data-period='" + period + "'"
+                        + "            data-room='" + (item.room || "") + "'>"
                         + btnText
                         + "    </button>"
                         + "  </td>"

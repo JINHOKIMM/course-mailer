@@ -19,8 +19,12 @@ public class CourseService {
         this.courseMapper = courseMapper;
     }
 
-    public List<Map<String, String>> selectCourseList(Map<String,String> userMap) {
-        return courseMapper.selectCourseList(userMap);
+    public List<Map<String, String>> selectCourseList1() {
+        return courseMapper.selectCourseList1();
+    };
+
+    public List<Map<String, String>> selectCourseList2() {
+        return courseMapper.selectCourseList2();
     };
 
     public List<Map<String, String>> selectMyCourse(Map<String, String> userMap) {
@@ -32,6 +36,7 @@ public class CourseService {
 
         String studentId =  String.valueOf(userMap.get("student_id"));
         String status = (String) body.get("status");
+        String room = (String) body.get("room");
 
         List<Map<String, String>> courses =
                 (List<Map<String, String>>) body.get("courses");
@@ -43,13 +48,15 @@ public class CourseService {
         // 1️⃣ 해당 status 전체 삭제
         courseMapper.deleteMyCourse(Map.of(
                 "student_id", studentId,
-                "status", status
+                "status", status,
+                "room", room
         ));
 
         // 2️⃣ 선택한 과목들 insert
         for (Map<String, String> course : courses) {
             course.put("student_id", studentId);
             course.put("status", status);
+            course.put("room", room);
             courseMapper.insertMyCourse(course);
             log.info("course === {}", course);
         }
@@ -82,6 +89,7 @@ public class CourseService {
         Map<String,String> param = new HashMap<>();
         param.put("course_id",course_id);
         param.put("period",userMap.get("period"));
+        param.put("room",userMap.get("room"));
 
         log.info("기존 course_id ===" + param.get("course_id"));
         log.info("기존 period ===" + param.get("period"));
