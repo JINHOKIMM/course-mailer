@@ -11,27 +11,30 @@ public interface CourseMapper {
 
     List<Map<String, String>> selectCourseList2();
 
-    List<Map<String, String>> selectMyCourse(Map<String, String> userMap);
+    List<Map<String, Object>> selectPlanned(Map<String, Object> userMap);
+    List<Map<String, Object>> selectFinal(Map<String, Object> userMap);
 
-    void insertMyCourse(Map<String, String> userMap);
+    void insertMyCourse(Map<String, Object> userMap);
 
-    void deleteMyCourse(Map<String, String> userMap);
+    void deleteMyCourse(Map<String, Object> userMap);
 
-    List<Map<String, String>> selectMyFutureCourse(Map<String, String> userMap);
+    List<Map<String, Object>> selectAvailableCourseList(Map<String, Object> userMap);
 
-    List<Map<String, String>> selectAvailableCourseList(Map<String, String> userMap);
+    String selectCourseId(Map<String, Object> userMap);
 
-    String selectCourseId(Map<String, String> userMap);
-
-    void student_cntUp(Map<String, String> map);
+    void student_cntUp(Map<String, Object> map);
 
     void student_cntDown(Map<String, String> map);
 
-    boolean isPossibleSwap(Map<String, String> userMap);
+    boolean isPossibleSwap(Map<String, Object> userMap);
 
     void updatePeriodCourse(Map<String, String> param);
 
-    String selectStudentCourseId(Map<String, String> userMap);
+    String selectStudentCourseId(Map<String, Object> userMap);
+
+    List<Map<String, Object>> selectMyCourse(Map<String, Object> userMap);
+
+    String selectRoom(Map<String, Object> userMap);
 
     //void updateMyCourse(Map<String, String> userMap);
 }

@@ -13,5 +13,5 @@ public interface StudentMapper {
 
     void updateStudent(Map<String, Object> map);
 
-    Map<String, String> selectUserMap(String sub);
+    Map<String, Object> selectUserMap(String sub);
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,83 +28,121 @@ public class CourseService {
         return courseMapper.selectCourseList2();
     };
 
-    public List<Map<String, String>> selectMyCourse(Map<String, String> userMap) {
+    public List<Map<String, Object>> selectMyCourse(Map<String, Object> userMap) {
         return courseMapper.selectMyCourse(userMap);
     }
 
     @Transactional
-    public void updateMyCourse(Map<String, String> userMap, Map<String, Object> body) {
+    public void updateMyCourse(Map<String, Object> userMap, Map<String, Object> body) {
 
-        String studentId =  String.valueOf(userMap.get("student_id"));
+        String studentId = String.valueOf(userMap.get("student_id"));
         String status = (String) body.get("status");
-        String room = (String) body.get("room");
 
-        List<Map<String, String>> courses =
-                (List<Map<String, String>>) body.get("courses");
+        List<Map<String, Object>> courses =
+                (List<Map<String, Object>>) body.get("courses");
 
+        // ✅ null / empty 먼저 체크
         if (courses == null || courses.isEmpty()) {
             throw new IllegalArgumentException("courses is empty or null");
         }
 
-        // 1️⃣ 해당 status 전체 삭제
         courseMapper.deleteMyCourse(Map.of(
                 "student_id", studentId,
-                "status", status,
-                "room", room
+                "status", status
         ));
 
         // 2️⃣ 선택한 과목들 insert
-        for (Map<String, String> course : courses) {
+        for (Map<String, Object> course : courses) {
+            String room = (String) course.get("room");
+
+
             course.put("student_id", studentId);
             course.put("status", status);
+
             course.put("room", room);
+
             courseMapper.insertMyCourse(course);
-            log.info("course === {}", course);
+
+            log.info("insert course => {}", course);
         }
     }
 
-    public List<Map<String, String>> selectMyFutureCourse(Map<String, String> userMap) {
-        return courseMapper.selectMyFutureCourse(userMap);
+
+    public Map<String, Object> selectMyFutureCourse(Map<String, Object> userMap) {
+
+        List<Map<String, Object>> planned = courseMapper.selectPlanned(userMap); // O
+        List<Map<String, Object>> changed = courseMapper.selectFinal(userMap);   // Y
+
+        Map<String, Map<String, Object>> plannedMap = new HashMap<>();
+        for (Map<String, Object> p : planned) {
+            plannedMap.put((String) p.get("period"), p);
+        }
+
+        Map<String, Map<String, Object>> changedMap = new HashMap<>();
+        for (Map<String, Object> y : changed) {
+            changedMap.put((String) y.get("period"), y);
+        }
+
+        List<Map<String, Object>> finalList = new ArrayList<>();
+
+        for (String period : List.of("A","B","C","D","E")) {
+            if (changedMap.containsKey(period)) {
+                finalList.add(changedMap.get(period));   // Y
+            } else if (plannedMap.containsKey(period)) {
+                finalList.add(plannedMap.get(period));   // O fallback
+            }
+        }
+
+        return Map.of(
+                "planned", planned,
+                "final", finalList
+        );
     }
 
-    public List<Map<String, String>> selectAvailableCourseList(Map<String, String> userMap, String period) {
+    public List<Map<String, Object>> selectAvailableCourseList(Map<String, Object> userMap, String period) {
         userMap.put("period",period);
         return courseMapper.selectAvailableCourseList(userMap);
     }
 
     @Transactional
-    public Map<String,String> updateMyPeriod(Map<String, String> userMap) {
+    public Map<String,String> updateMyPeriod(Map<String, Object> userMap) {
         Map<String,String> result = new HashMap<>();
 
         // 정원 확인 로직 (해당 과목으로 변경 가능한지)
         if(!courseMapper.isPossibleSwap(userMap)){
 
             result.put("res","010");
-            result.put("msg","이미 정원이 꽉찬 과목입니다.");
+            result.put("msg", "This course is already full.");
             return result;
         }
 
         // 기존 course_id 가져오기
-        String course_id = courseMapper.selectCourseId(userMap);
+        userMap.put("status","Y");
+        String course_id = courseMapper.selectCourseId(userMap);    //기존 ID
+        String room = courseMapper.selectRoom(userMap);             //기존 room
+
+        if(course_id == null){
+            courseMapper.insertMyCourse(userMap);
+            result.put("res","000");
+            return result;
+        }
 
         Map<String,String> param = new HashMap<>();
-        param.put("course_id",course_id);
-        param.put("period",userMap.get("period"));
-        param.put("room",userMap.get("room"));
-
-        log.info("기존 course_id ===" + param.get("course_id"));
-        log.info("기존 period ===" + param.get("period"));
+        param.put("course_id",course_id);                           //기존 ID
+        param.put("period", (String) userMap.get("period"));        //기존과 현재 period는 같음
+        param.put("room",room);                                     //기존 room
 
         /* 기존 선택한 과목 정원 -1 */
         courseMapper.student_cntDown(param);
 
         /* 현재 선택한 과목 정원 +1 */
+        param.put("room", (String) userMap.get("room"));            //현재 room 으로 교체
         courseMapper.student_cntUp(userMap);
 
-        // student_course 테이블의 id 가져오기(시퀀스)
+        // student_course 테이블의 기존id 가져오기(시퀀스)
         String id = courseMapper.selectStudentCourseId(userMap);
 
-        param.put("nextCourseId", userMap.get("course_id"));
+        param.put("nextCourseId", (String) userMap.get("course_id"));
         param.put("id", id);
         courseMapper.updatePeriodCourse(param);
 

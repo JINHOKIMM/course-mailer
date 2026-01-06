@@ -21,7 +21,7 @@
             cct.course_name,
             cct.room
         FROM course_cd_tb cct
-        ORDER BY cct.course_name
+        ORDER BY cct.course_id
     </select>
 
     <select id="selectMyCourse" parameterType="map" resultType="map">
@@ -56,23 +56,41 @@
 
     <delete id="deleteMyCourse" parameterType="map">
         DELETE FROM student_course
-        WHERE student_id = #{student_id}::integer  AND  status = #{status}
+        WHERE student_id = #{student_id}::integer
+            AND status = #{status}
     </delete>
 
 
-    <select id="selectMyFutureCourse" parameterType="map" resultType="map">
+    <select id="selectPlanned" parameterType="map" resultType="map">
         SELECT
             sc.id
              ,sc.student_id
              ,sc.course_id
              ,sc.period
              ,sc.status
+             ,sc.room
              ,cct.course_name
              ,cct.lock_yn
         FROM
             student_course sc left join course_cd_tb cct on sc.course_id = cct.course_id
         where
             status = 'O' and student_id = #{student_id}::integer
+    </select>
+
+    <select id="selectFinal" parameterType="map" resultType="map">
+        SELECT
+            sc.id
+             ,sc.student_id
+             ,sc.course_id
+             ,sc.period
+             ,sc.status
+             ,sc.room
+             ,cct.course_name
+             ,cct.lock_yn
+        FROM
+            student_course sc left join course_cd_tb cct on sc.course_id = cct.course_id
+        where
+            status = 'Y' and student_id = #{student_id}::integer
     </select>
 
     <select id="selectAvailableCourseList" parameterType="map" resultType="map">
@@ -125,7 +143,7 @@
         )
         )
         )
-        ORDER BY c.course_code
+        ORDER BY c.course_code , course_seq
     </select>
 
     <select id="selectCourseId" parameterType="Map" resultType="String">
@@ -136,6 +154,7 @@
         WHERE
             student_id = #{student_id}::integer
             AND period = #{period}
+            AND status = #{status}
     </select>
 
     <update id="student_cntDown" parameterType="Map">
@@ -145,7 +164,7 @@
         WHERE
             course_code = #{course_id}::integer
             AND substring(period,1,1) = #{period}
-          AND room = #{room}
+            AND room = #{room}
     </update>
 
     <update id="student_cntUp" parameterType="Map">
@@ -155,7 +174,7 @@
         WHERE
             course_code = #{course_id}::integer
             AND substring(period,1,1) = #{period}
-          AND room = #{room}
+            AND room = #{room}
     </update>
 
     <select id="isPossibleSwap" parameterType="map" resultType="boolean">
@@ -180,12 +199,25 @@
         WHERE
             student_id = #{student_id}::integer
             AND period = #{period}
+            AND status = #{status}
+    </select>
+
+    <select id="selectRoom" parameterType="Map" resultType="String">
+        SELECT
+            room
+        FROM
+            student_course
+        WHERE
+            student_id = #{student_id}::integer
+            AND period = #{period}
+          AND status = #{status}
     </select>
 
     <update id="updatePeriodCourse" parameterType="Map">
         UPDATE student_course
         SET
-            course_id = #{nextCourseId}::integer
+            course_id = #{nextCourseId}::integer,
+            room = #{room}
         WHERE
             id = #{id}::integer
 
