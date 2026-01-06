@@ -35,8 +35,6 @@
         <div class="userBox">
             <ul>
                 <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
-            </ul>
-            <ul>
                 <li><button type="button" onclick="location.href='/mailHistory';" class="logout">history</button></li>
             </ul>
         </div>
@@ -175,15 +173,20 @@
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");
 
-                debugger;
                 // ✅ grade 라디오 체크 동기화
-                if (user.grade === 13) {
+                if (user.grade === 13 && user.mail_seq) {
                     alert(
                         "An email regarding your course change due to graduation credit requirements has already been sent."
                     );
                     location.href = "/mailHistory";
-                }
-                else if (user.grade >= '9' && user.grade <= '12') {
+                }else if (user.grade !== 13 && user.mail_seq) {
+                    alert(
+                        "Your course change request email has already been sent.\n" +
+                        "You cannot send another request.\n\n" +
+                        "Please check the mail history for details."
+                    );
+                    location.href = "/mailHistory";
+                }else if (user.grade >= '9' && user.grade <= '12') {
                     const gradeText = user.grade + "th Grade";
 
                     $("input[name='grade']").prop("checked", false);
@@ -197,10 +200,11 @@
             },
             error: function(xhr) {
                 if (xhr.status === 401) {
-                    alert("로그인 후 이용해주세요.");
+                    alert("Please log in to continue.");
                     location.href = "/login";
                 } else {
-                    alert("사용자 정보를 불러오지 못했습니다.");
+                    alert("Failed to load List. Please try again later.");
+                    location.href = "/login";
                 }
             }
         });
@@ -225,7 +229,8 @@
                 });
             },
             error: function() {
-                alert("이전 수업 목록을 불러오지 못했습니다.");
+                alert("Failed to load List. Please try again later.");
+                location.href = "/login";
             }
         });
     }
@@ -247,7 +252,8 @@
                 selectMyCourse();
             },
             error: function() {
-                alert("신청 가능 수업 목록을 불러오지 못했습니다.");
+                alert("Failed to load List. Please try again later.");
+                location.href = "/login";
             }
         });
     }
@@ -327,7 +333,7 @@
         const selected = document.querySelector('input[name="grade"]:checked');
 
         if (!selected) {
-            alert("학년을 선택하세요.");
+            alert("Please select your grade.");
             return;
         }
 
@@ -438,8 +444,8 @@
                 });
             },
             error: function (xhr) {
-                alert("내 수업 정보를 불러오지 못했습니다.");
-                location.href="/login";
+                alert("Failed to load List. Please try again later.");
+                location.href = "/login";
             }
         });
     }
@@ -463,7 +469,7 @@
 
             // 1️⃣ 정확히 5개 선택
             if (checked.length !== 5) {
-                alert("이후 과목은 반드시 5개를 선택해야 합니다.");
+                alert("You must select exactly five courses for the next semester.");
                 return;
             }
 
@@ -488,10 +494,10 @@
                 console.log("period:", period);
 
                 // 3️⃣ period 중복 검사
-                if (usedPeriods.has(period)) {
-                    alert(`period ${period} 는 이미 선택되었습니다.\nA~E는 각각 하나씩만 선택 가능합니다.`);
-                    return;
-                }
+                alert(
+                    "Period " + period + " has already been selected.\n" +
+                    "Only one course can be selected for each period (A–E)."
+                );
 
                 usedPeriods.add(period);
 
@@ -509,7 +515,7 @@
 
         // ✅ 이전 과목 (period 무시)
         if (checked.length === 0) {
-            alert("선택된 과목이 없습니다.");
+            alert("No courses have been selected.");
             return;
         }
 
@@ -542,11 +548,11 @@
                 withCredentials: true
             },
             success: function () {
-                alert("저장되었습니다.");
+                alert("Saved successfully.");
                 selectCourseList();
             },
             error: function () {
-                alert("저장 중 오류가 발생했습니다.");
+                alert("An error occurred while saving.");
             }
         });
     }
@@ -557,7 +563,7 @@
         const checked = $("#futureCourseBody input[type='checkbox']:checked");
 
         if (checked.length > 5) {
-            alert("이후 과목은 최대 5개까지만 선택할 수 있습니다.");
+            alert("You can select up to 5 future courses only.");
             this.checked = false;
         }
     });
@@ -570,7 +576,7 @@
             if (!val) return;
 
             if (selectedPeriods.has(val)) {
-                alert(`period ${val} 는 이미 선택되었습니다.`);
+                alert(`Period ${val} has already been selected.`);
                 $(this).val("");
             } else {
                 selectedPeriods.add(val);
@@ -614,10 +620,10 @@
                     if(myCourse.status === 'O') futureCnt++;
                 });
                 if(futureCnt === 5) location.href = "/sub";
-                else alert("future course를 5개 선택해주세요.");
+                else alert("Please select 5 future courses.");
             },
             error: function (xhr) {
-                alert("내 수업 정보를 불러오지 못했습니다.");
+                alert("Failed to load your course information.");
             }
         });
     }
@@ -644,7 +650,7 @@
                 $(".loading-dim").css("display", "flex").hide().fadeIn(200);
             },
             success: function () {
-                alert("메일을 전송했습니다.");
+                alert("The email has been sent.");
                 location.href = "/mailHistory";
             },
             error: function (xhr) {

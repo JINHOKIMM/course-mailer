@@ -23,12 +23,12 @@ public class MailApiController {
         this.studentService = studentService;
     }
 
-    private Map<String,String> requireLogin(OAuth2User user) {
+    private Map<String,Object> requireLogin(OAuth2User user) {
         if (user == null) {
             log.info("=== 로그인 x ===");
             throw new UnauthorizedException();
         }
-        Map<String,String> userMap = new HashMap<>();
+        Map<String,Object> userMap = new HashMap<>();
         userMap = studentService.selectUserMap(getSub(user));
         return userMap;
     }
@@ -40,7 +40,7 @@ public class MailApiController {
 
     @PostMapping("/send")
     public ResponseEntity<?> mailSend(@AuthenticationPrincipal OAuth2User user, @RequestParam  Map<String, Object> body) {
-        Map<String,String> userMap = requireLogin(user);
+        Map<String,Object> userMap = requireLogin(user);
 
         mailService.mailSend(userMap,body);
 
@@ -51,7 +51,7 @@ public class MailApiController {
 
     @GetMapping("/history")
     public ResponseEntity<?> selectMailHistory(@AuthenticationPrincipal OAuth2User user) {
-        Map<String,String> userMap = requireLogin(user);
+        Map<String,Object> userMap = requireLogin(user);
         //String email = user.getAttribute("email");
 
         return ResponseEntity.ok(
@@ -61,7 +61,7 @@ public class MailApiController {
 
     @PostMapping("/graduateMailSend")
     public ResponseEntity<?> graduateMailSend(@AuthenticationPrincipal OAuth2User user) {
-        Map<String,String> userMap = requireLogin(user);
+        Map<String,Object> userMap = requireLogin(user);
 
         mailService.graduateMailSend(userMap);
 

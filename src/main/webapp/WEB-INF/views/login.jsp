@@ -16,8 +16,8 @@
     <div class="card">
         <div class="brand">
             <!-- 로고 이미지 파일을 넣을 거면 아래 img로 바꾸면 됨 -->
-            <div class="logo-badge" aria-hidden="true">
-                <span>✦</span>
+            <div class="logo-badge" aria-hidden="true" style="background-color: #7c9dde;">
+                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="logo">
             </div>
             <div class="brand-title">Welcome</div>
             <div class="brand-sub">Sign in to continue</div>

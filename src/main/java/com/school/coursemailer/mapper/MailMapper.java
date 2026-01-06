@@ -10,5 +10,5 @@ public interface MailMapper {
 
     void insertMailSeq(Map<String, Object> mailMap);
 
-    List<Map<String, Object>> selectMailHistory(Map<String, String> userMap);
+    List<Map<String, Object>> selectMailHistory(Map<String, Object> userMap);
 }

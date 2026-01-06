@@ -238,7 +238,7 @@ input[type="radio"]:checked + label::before {outline: 1px solid #346FB2; border:
 .send .tit {margin-bottom: 5px; font-size: 20px; font-weight: 700; color: #063A74; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .send .sub {margin-bottom: 10px; font-size: 14px; font-weight: 500; color: #346FB2; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .send p {display: block; text-align: left; font-size: 12px; font-weight: 400; line-height: 1.5; color: #464C53;}
-.send .txtBox {display: block; height: 150px; padding: 10px 15px; max-height: 150px; background-color: rgba(59, 59, 59, 0.1);border: 1px solid rgba(118, 118, 118, 0.2); border-radius: 6px; overflow-y: auto;}
+.send .txtBox {display: block; padding: 10px 15px; max-height: 250px; background-color: rgba(59, 59, 59, 0.1);border: 1px solid rgba(118, 118, 118, 0.2); border-radius: 6px;}
 .send .btn-wrap {margin-top: 25px;}
 
 .top-course-name {
@@ -298,7 +298,7 @@ td.locked::after {
 /* 선택된 period */
 td.period-active {
     background-color: #eef4ff;
-    border: 2px solid #4a6cf7;
+    box-shadow: inset 0 0 0 2px #4a6cf7;
 }
 
 /* 다른 period 흐리게 */
@@ -368,6 +368,7 @@ td.period-dim {
 .send .txtBox textarea {
     width: 100%;
     height: 100%;
+    min-height: 230px;
     border: none;
     resize: none;
     background: transparent;
@@ -424,6 +425,7 @@ td.period-dim {
 
 .planned-table {
     opacity: 0.85;
+    pointer-events: none;
 }
 
 .planned-table td {
@@ -437,6 +439,11 @@ td.period-dim {
 .planned-table + .final-table {
     margin-top: 30px;
 }
+
+.planned-table .drop-btn {
+    display: none;
+}
+
 
 /* =========================
    Grade 전용 Dim (강제)
@@ -461,4 +468,65 @@ td.period-dim {
     transform: translate(-50%, -50%);
 
     z-index: 9001; /* dim 위 */
+}
+
+#mailPopup {
+    width: 800px;
+    height: 450px;
+}
+
+/* Mail Send History 전용 테이블 컬럼 조정 */
+#container #mailHistoryTable {
+    table-layout: fixed;   /* 컬럼 폭 고정 */
+}
+
+/* No */
+#container #mailHistoryTable th:nth-child(1),
+#container #mailHistoryTable td:nth-child(1) {
+    width: 45px;
+    text-align: center;
+}
+
+/* Title - 가장 넓게 */
+#container #mailHistoryTable th:nth-child(2),
+#container #mailHistoryTable td:nth-child(2) {
+    width: auto;
+    text-align: left;
+    padding-left: 14px;
+}
+
+/* Sender */
+#container #mailHistoryTable th:nth-child(3),
+#container #mailHistoryTable td:nth-child(3) {
+    width: 250px;
+    text-align: center;
+}
+
+/* Sent At */
+#container #mailHistoryTable th:nth-child(4),
+#container #mailHistoryTable td:nth-child(4) {
+    width: 170px;
+    text-align: center;
+}
+
+/* View */
+#container #mailHistoryTable th:nth-child(5),
+#container #mailHistoryTable td:nth-child(5) {
+    width: 120px;
+    text-align: center;
+}
+
+#container #mailHistoryTable td:nth-child(2) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.final-table td.updated {
+    animation: flash 0.8s ease;
+}
+
+@keyframes flash {
+    0%   { background:#fff6c4; }
+    100% { background:transparent; }
 }

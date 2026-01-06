@@ -41,7 +41,7 @@
                     <div class="tit">Mail Send History</div>
 
                     <div class="tblBox col">
-                        <table class="tbl blue">
+                        <table class="tbl blue" id="mailHistoryTable">
                             <thead>
                             <tr>
                                 <th>No</th>
@@ -59,10 +59,9 @@
                 </li>
             </ul>
         </div>
-
     </div>
     <div class="dim"></div>
-    <div class="popup" style="display:none;">
+    <div class="popup" id="mailPopup" style="display:none;">
         <div class="send">
             <button type="button" class="popup-close" onclick="closePopup()">×</button>
 
@@ -100,10 +99,11 @@
             },
             error: function(xhr) {
                 if (xhr.status === 401) {
-                    alert("로그인 후 이용해주세요.");
+                    alert("Please log in to continue.");
+
                     location.href = "/login";
                 } else {
-                    alert("사용자 정보를 불러오지 못했습니다.");
+                    alert("Failed to load user information.");
                 }
             }
         });
@@ -188,7 +188,9 @@
 
     function escapeAttr(str) {
         if (!str) return "";
-        return str.replace(/"/g, "&quot;").replace(/\n/g, " ");
+        return str
+            .replace(/"/g, "&quot;")
+            .replace(/\r/g, "");
     }
 
     function formatDate(dateStr) {

@@ -33,8 +33,8 @@
 
         <div class="userBox">
             <ul>
-                <li><button type="button" class="logout">sign out</button></li>
-                <li><button type="button" class="logout">history</button></li>
+                <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
+                <li><button type="button" onclick="location.href='/mailHistory';" class="logout">history</button></li>
             </ul>
         </div>
     </div>
@@ -184,14 +184,14 @@
 
     <!-- 팝업 -->
     <div class="dim"></div>
-    <div class="popup" style="display:none;">
+    <div class="popup" id="mailPopup" style="display:none;">
         <div class="send">
 
             <!-- X 닫기 버튼 -->
             <button type="button" class="popup-close" onclick="closePopup()">×</button>
 
-            <p class="tit" id="title">[SJA]과목변경</p>
-            <p class="sub" id="receiver_email">kjh55514@naver.com</p>
+            <p class="tit" id="title">Course Change Report</p>
+            <p class="sub" id="receiver_email">kjh55514@naver.com, s22270836@sjajeju.kr</p>
 
             <div class="txtBox">
                 <textarea id="content" placeholder="메일 내용을 입력하세요"></textarea>
@@ -211,6 +211,10 @@
     </div>
 </div>
 <script>
+    let userNm ='';
+    let userEmail ='';
+    let userGrade ='';
+
     $(function () {
         loginChk();
     });
@@ -224,7 +228,9 @@
             },
             success: function (user) {
                 console.log(user);
-
+                userNm = user.name;
+                userEmail = user.google_email;
+                userGrade = user.grade;
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");
 
@@ -245,40 +251,51 @@
         $.ajax({
             url: "/course/myFutureCourse",
             type: "GET",
-            xhrFields: {
-                withCredentials: true
-            },
+            xhrFields: { withCredentials: true },
             success: function (res) {
 
-                // 초기화
-                $(".top-course-name").text("-");
-                $(".drop-btn")
+                const planned = res.planned; // O
+                const finalList = res.final; // Y 우선 + O fallback
+
+                /* =========================
+                   초기화
+                ========================= */
+                $(".planned-table .top-course-name").text("-");
+                $(".final-table .top-course-name").text("-");
+                $(".final-table td").removeClass("locked");
+
+                $(".final-table .drop-btn")
                     .prop("disabled", false)
-                    .removeClass("lock")
+                    .removeClass("lock active")
                     .text("Drop");
 
-                $(".bottom-list tr").removeClass("locked");
+                /* =========================
+                   🔹 Planned table (O 고정)
+                ========================= */
+                planned.forEach(item => {
+                    $(".planned-table td[data-period='" + item.period + "']")
+                        .find(".top-course-name")
+                        .text(item.course_name);
+                });
 
-                res.forEach(function (item) {
-                    const period = item.period;          // A/B/C/D/E
+                /* =========================
+                   🔹 Final table (Y 우선)
+                ========================= */
+                finalList.forEach(item => {
+                    const period = item.period;
                     const courseName = item.course_name;
                     const lockYn = item.lock_yn;
 
-                    const $cell = $("td[data-period='" + period + "']");
-                    const $btn = $cell.find(".drop-btn");
+                    const $cell = $(".final-table td[data-period='" + period + "']");
+                    const $btn  = $cell.find(".drop-btn");
 
-                    // 상단 과목명
                     $cell.find(".top-course-name").text(courseName);
 
-                    // 🔒 잠금 처리
                     if (lockYn === "Y") {
-                        // 상단 버튼 잠금
                         $btn
                             .prop("disabled", true)
                             .addClass("lock")
                             .text("Locked");
-
-                        // ✅ td 배경 회색 처리
                         $cell.addClass("locked");
                     }
                 });
@@ -358,23 +375,81 @@
         $(".bottom-list[data-period='" + period + "']").fadeIn(300);
 
         // active 처리
-        $(".drop-btn").removeClass("active");
+        $(".final-table .drop-btn").removeClass("active");
         $(".drop-btn[data-period='" + period + "']").addClass("active");
     }
 
 
     function openPopup() {
+        $.ajax({
+            url: "/course/myFutureCourse",
+            type: "GET",
+            xhrFields: { withCredentials: true },
+            success: function (res) {
+
+                const planned = res.planned; // O
+                const finalList = res.final; // Y 우선 + O fallback
+
+                // period → 과목명 매핑
+                const before = { A:'-', B:'-', C:'-', D:'-', E:'-' };
+                const after  = { A:'-', B:'-', C:'-', D:'-', E:'-' };
+
+                planned.forEach(function(item){
+                    before[item.period] = item.course_name
+                    if(item.room) before[item.period] += "("+item.room+")";
+                });
+
+                finalList.forEach(function(item){
+                    after[item.period] = item.course_name;
+                    if(item.room) after[item.period] += " ("+item.room+")";
+                });
+
+                var mailContent =
+                    "This is to report that the following student has requested a course change at SJA Jeju.\n\n" +
+
+                    "Student Name: [" + userNm + "]\n" +
+                    "Student Email: [" + userEmail + "]\n" +
+                    "Grade: [" + userGrade + "]\n\n" +
+
+                    "Original Course: [" +
+                    before.A + " A ], [" +
+                    before.B + " B ], [" +
+                    before.C + " C ], [" +
+                    before.D + " D ], [" +
+                    before.E + " E ]\n\n" +
+
+                    "Revised Course: [" +
+                    after.A + " A ], [" +
+                    after.B + " B ], [" +
+                    after.C + " C ], [" +
+                    after.D + " D ], [" +
+                    after.E + " E ]\n\n" +
+
+                    "Please review and advise on the next steps.\n\n" +
+
+                    "Sincerely,\n" +
+                    "Hera Kim\n" +
+                    "SJA Jeju";
+
+                $("#content").val(mailContent);
+            },
+            error: function () {
+                alert("The email has been sent.");
+            }
+        });
+
         $('.dim').fadeIn(200);
         $('.popup').fadeIn(200);
         $('body').addClass('lock');
     }
+
 
     function sendMailConfirm() {
         const content = $('#content').val();
         console.log(content);
     }
 
-    $(".drop-btn").on("click", function () {
+    $(".final-table").on("click", ".drop-btn", function () {
         var $cell = $(this).closest("td");
 
         if ($cell.hasClass("locked")) {
@@ -387,7 +462,8 @@
     });
 
     function highlightPeriod(period) {
-        $("td[data-period]").removeClass("period-active period-dim");
+        $(".final-table td[data-period]")
+            .removeClass("period-active period-dim");
         $(".drop-btn").removeClass("active");
 
         // 선택된 period
@@ -401,6 +477,13 @@
 
     $(document).on("click", ".swap-btn:not(.disabled)", function () {
         if(!confirm("정말 바꾸시겠습니까?")){return;}
+
+        var courseName = $(this)
+            .closest("tr")
+            .find("td:first")
+            .text()
+            .trim();
+
         var courseCode = $(this).data("course-code");
         var newPeriod  = $(this).data("period");
         var room       = $(this).data("room");
@@ -413,7 +496,7 @@
         console.log("새 course_code:", courseCode);
         console.log("room:", room);
 
-        var $topCell = $("td[data-period='" + oldPeriod + "']");
+        var $topCell = $(".final-table td[data-period='" + oldPeriod + "']");
         var $row = $(this).closest("tr");
 
         // 🔥 스왑 애니메이션
@@ -430,15 +513,25 @@
                     room: room
                 },
                 success: function (result) {
-                    if(result.res === '010'){
+                    if (result.res !== '000') {
                         alert(result.msg);
-                        location.reload();
-                    }else{
-                        setTimeout(function () {
-                            location.reload();
-                            //onDropClick(oldPeriod);
-                        }, 400);
+                        return;
                     }
+
+                    const text =
+                        courseName +
+                        (room ? " (" + room + ")" : "");
+
+                    const $cell = $(".final-table td[data-period='" + oldPeriod + "']");
+                    $cell.find(".top-course-name").text(text);
+
+                    // UI 정리
+                    $(".bottom-list").fadeOut(150);
+                    $(".final-table td").removeClass("period-active period-dim");
+                    $(".drop-btn").removeClass("active");
+
+                    $cell.addClass("updated");
+                    setTimeout(() => $cell.removeClass("updated"), 800);
                 }
             });
         });
@@ -466,12 +559,10 @@
     }
 
     function sendMail(){
-        if(!confirm("메일을 발송 하시겠습니까?")){
+        if (!confirm("Would you like to send the email?")) {
             return;
         }
 
-        let title = $('#title').text();
-        let receiver_email = $('#receiver_email').text();
         let content = $('#content').val();
 
         console.log("content === "+ content);
@@ -483,15 +574,14 @@
                 withCredentials: true   // 로그인 세션 유지
             },
             data: {
-                content:content,
-                receiver_email:receiver_email
+                content:content
             },
             beforeSend: function () {
                 $("#sendMailBtn").prop("disabled", true);
                 $(".loading-dim").css("display", "flex").hide().fadeIn(200);
             },
             success: function () {
-                alert("메일을 전송했습니다.");
+                alert("The email has been sent.");
                 location.href = "/mailHistory";
             },
             error: function (xhr) {
