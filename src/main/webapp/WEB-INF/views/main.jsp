@@ -68,7 +68,7 @@
                     </ul>
 
                     <div class="btn-wrap">
-                        <button type="button" class="btn blue" onclick="onClickDone()">Done</button>
+                        <button type="button" class="btn green" onclick="onClickDone()">Done</button>
                     </div>
                 </li>
 
@@ -94,7 +94,7 @@
 
                     <div class="btn-wrap">
                         <button type="button" class="btn" onclick="clearPrev();">Clear</button>
-                        <button type="button" class="btn blue" onclick="updateCourse('X');">Done</button>
+                        <button type="button" class="btn green" onclick="updateCourse('X');">Done</button>
                     </div>
                 </li>
                 <li>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="btn-wrap">
                         <button type="button" class="btn" onclick="clearFuture();">Clear</button>
-                        <button type="button" class="btn blue" onclick="updateCourse('O');">Done</button>
+                        <button type="button" class="btn green" onclick="updateCourse('O');">Done</button>
                     </div>
                 </li>
             </ul>
@@ -137,7 +137,7 @@
         <p>If you select "Yes," an email will be sent to your<br>counselor, and you'll just need to have a meeting.<br>If you select "No," you'll be redirected to the schedule<br>change website.</p>
         <div class="btn-wrap">
             <button type="button" class="btn pt" onclick="onGradeYes()">Yes</button>
-            <button type="button" class="btn gray" onclick="onGradeNo()">No</button>
+            <button type="button" class="btn red" onclick="onGradeNo()">No</button>
         </div>
         <p class="sub">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
     </div>
@@ -494,10 +494,13 @@
                 console.log("period:", period);
 
                 // 3️⃣ period 중복 검사
-                alert(
-                    "Period " + period + " has already been selected.\n" +
-                    "Only one course can be selected for each period (A–E)."
-                );
+                if (usedPeriods.has(period)) {
+                    alert(
+                        "Period " + period + " has already been selected.\n" +
+                        "Only one course can be selected for each period (A–E)."
+                    );
+                }
+
 
                 usedPeriods.add(period);
 

@@ -41,7 +41,7 @@
                     <div class="tit">Mail Send History</div>
 
                     <div class="tblBox col">
-                        <table class="tbl blue" id="mailHistoryTable">
+                        <table class="tbl green" id="mailHistoryTable">
                             <thead>
                             <tr>
                                 <th>No</th>
@@ -73,7 +73,7 @@
             </div>
 
             <div class="btn-wrap">
-                <button type="button" class="btn gray" onclick="closePopup()">Close</button>
+                <button type="button" class="btn red" onclick="closePopup()">Close</button>
             </div>
         </div>
     </div>
@@ -135,7 +135,7 @@
                         + "<td>" + escapeHtml(mail.google_email) + "</td>"
                         + "<td>" + formatDate(mail.sent_at) + "</td>"
                         + "<td>"
-                        + "<button class='btn blue view-btn'"
+                        + "<button class='btn green view-btn'"
                         + " data-title=\"" + escapeAttr(mail.title) + "\""
                         + " data-receiver=\"" + escapeAttr(mail.receiver_email) + "\""
                         + " data-content=\"" + escapeAttr(mail.content) + "\">View</button>"

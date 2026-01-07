@@ -50,7 +50,7 @@
         </div>
 
         <div class="tblBox col planned-table">
-            <table class="tbl blue">
+            <table class="tbl green">
                 <colgroup>
                     <col style="width:20%">
                     <col style="width:20%">
@@ -88,7 +88,7 @@
         </div>
 
         <div class="tblBox col final-table">
-            <table class="tbl blue">
+            <table class="tbl green">
                 <colgroup>
                     <col style="width:20%">
                     <col style="width:20%">
@@ -339,8 +339,8 @@
                     var isFull = item.student_count >= item.max_seats;
 
                     var btnClass = isFull
-                        ? "btn gray swap-btn disabled"
-                        : "btn blue swap-btn";
+                        ? "btn red swap-btn disabled"
+                        : "btn green swap-btn";
 
                     var btnText = isFull ? "Full" : "Swap";
                     var disabledAttr = isFull ? " disabled" : "";
@@ -476,7 +476,7 @@
     }
 
     $(document).on("click", ".swap-btn:not(.disabled)", function () {
-        if(!confirm("정말 바꾸시겠습니까?")){return;}
+        if(!confirm("Is this your representative?")){return;}
 
         var courseName = $(this)
             .closest("tr")
