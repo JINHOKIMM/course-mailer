@@ -50,7 +50,7 @@
 
                     <ul class="item">
                         <li>
-                            <input type="radio" id="rdo01" name="grade" value="9th Grade" checked>
+                            <input type="radio" id="rdo01" name="grade" value="9th Grade">
                             <label for="rdo01">9th Grade</label>
                         </li>
                         <li>
@@ -499,6 +499,7 @@
                         "Period " + period + " has already been selected.\n" +
                         "Only one course can be selected for each period (A–E)."
                     );
+                    return;
                 }
 
 
@@ -610,6 +611,14 @@
     }
 
     function nextPage(){
+        const $checked = $("input[name='grade']:checked");
+        let grade = $checked.length ? $checked.val() : null;
+
+        if (!grade) {
+            alert("Please select your grade.");
+            return;
+        }
+
         $.ajax({
             url: "/course/myCourse",
             type: "GET",
