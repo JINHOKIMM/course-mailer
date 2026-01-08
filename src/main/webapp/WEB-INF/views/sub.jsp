@@ -43,7 +43,7 @@
     <!-- container -->
     <div id="container" class="container">
         <div class="section-head">
-            <h3 class="section-title">Planned Courses for Next Semester</h3>
+            <h3 class="section-title">Original Courses</h3>
             <p class="section-desc">
                 Courses you planned to take next semester. This section is read-only.
             </p>

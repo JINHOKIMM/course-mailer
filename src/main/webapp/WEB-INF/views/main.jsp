@@ -98,7 +98,7 @@
                     </div>
                 </li>
                 <li>
-                    <p class="tit">Subjects to be taken in the future</p>
+                    <p class="tit">Current semester courses</p>
                     <div class="sch">
                         <input type="text" id="futureSearch" placeholder="Search course">
                         <button type="button" class="btn-sch"></button>
