@@ -168,7 +168,6 @@
                 withCredentials: true
             },
             success: function (user) {
-                console.log(user);
 
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");
@@ -340,7 +339,6 @@
         // 숫자만 추출
         const gradeNum = selected.value.match(/\d+/)[0];
 
-        console.log('gradeNum ===', gradeNum); // 9, 10, 11, 12
 
         updateGrade(gradeNum);
     }
@@ -487,11 +485,6 @@
                 const period = $tr.find("select").val();
 
                 // 콘솔 출력 🔥
-                console.log("체크박스 ID:", id);
-                console.log("과목 ID:", courseId);
-                console.log("과목명:", courseName);
-                console.log("room:", room);
-                console.log("period:", period);
 
                 // 3️⃣ period 중복 검사
                 if (usedPeriods.has(period)) {
@@ -628,7 +621,6 @@
             success: function (res) {
                 let futureCnt = 0;
                 res.forEach(myCourse => {
-                    console.log(myCourse);
                     if(myCourse.status === 'O') futureCnt++;
                 });
                 if(futureCnt === 5) location.href = "/sub";

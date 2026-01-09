@@ -191,7 +191,7 @@
             <button type="button" class="popup-close" onclick="closePopup()">×</button>
 
             <p class="tit" id="title">Course Change Report</p>
-            <p class="sub" id="receiver_email">kjh55514@naver.com, s22270836@sjajeju.kr</p>
+            <p class="sub" id="receiver_email">hs_admin@sjajeju.kr</p>
 
             <div class="txtBox">
                 <textarea id="content" placeholder="메일 내용을 입력하세요"></textarea>
@@ -227,7 +227,6 @@
                 withCredentials: true
             },
             success: function (user) {
-                console.log(user);
                 userNm = user.name;
                 userEmail = user.google_email;
                 userGrade = user.grade;
@@ -446,7 +445,6 @@
 
     function sendMailConfirm() {
         const content = $('#content').val();
-        console.log(content);
     }
 
     $(".final-table").on("click", ".drop-btn", function () {
@@ -491,10 +489,6 @@
         // 현재 선택 중인 period (Drop으로 선택한)
         var oldPeriod = $(".drop-btn.active").data("period");
 
-        console.log("기존 period:", oldPeriod);
-        console.log("새 period:", newPeriod);
-        console.log("새 course_code:", courseCode);
-        console.log("room:", room);
 
         var $topCell = $(".final-table td[data-period='" + oldPeriod + "']");
         var $row = $(this).closest("tr");
@@ -565,7 +559,6 @@
 
         let content = $('#content').val();
 
-        console.log("content === "+ content);
 
         $.ajax({
             url: "/mail/send",

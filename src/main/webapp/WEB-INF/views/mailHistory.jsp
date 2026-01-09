@@ -92,7 +92,6 @@
                 withCredentials: true
             },
             success: function (user) {
-                console.log(user);
 
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");

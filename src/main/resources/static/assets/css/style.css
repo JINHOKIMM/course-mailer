@@ -240,7 +240,7 @@ input[type="radio"]:checked + label::before {outline: 1px solid #87b234; border:
 .send .tit {margin-bottom: 5px; font-size: 20px; font-weight: 700; color: #0c7406; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .send .sub {margin-bottom: 10px; font-size: 14px; font-weight: 500; color: #3bb234; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .send p {display: block; text-align: left; font-size: 12px; font-weight: 400; line-height: 1.5; color: #464C53;}
-.send .txtBox {display: block; height: 150px; padding: 10px 15px; max-height: 150px; background-color: rgba(59, 59, 59, 0.1);border: 1px solid rgba(118, 118, 118, 0.2); border-radius: 6px; overflow-y: auto;}
+.send .txtBox {display: block; padding: 10px 15px;  background-color: rgba(59, 59, 59, 0.1);border: 1px solid rgba(118, 118, 118, 0.2); border-radius: 6px;}
 .send .btn-wrap {margin-top: 25px;}
 
 .top-course-name {

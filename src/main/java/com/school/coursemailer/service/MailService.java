@@ -1,15 +1,11 @@
 package com.school.coursemailer.service;
 
-import com.school.coursemailer.controller.MailApiController;
-import com.school.coursemailer.mapper.CourseMapper;
 import com.school.coursemailer.mapper.MailMapper;
 import com.school.coursemailer.mapper.StudentMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +29,7 @@ public class MailService {
     public void mailSend(Map<String,Object> userMap, Map<String,Object> body) {
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("kjh55514@naver.com","s22270836@sjajeju.kr");      //받는 사람 이메일
+        message.setTo("hs_admin@sjajeju.kr");      //받는 사람 이메일
         message.setSubject("Course Change Report");                      //메일 제목
         message.setText((String) body.get("content"));                   //내용
         message.setFrom("AddDropSjajeju <sja@gmail.com>");               //보내는사람
@@ -44,7 +40,7 @@ public class MailService {
         Map<String,Object> mailMap = new HashMap<>();
         mailMap.put("title",message.getSubject());
         mailMap.put("content",message.getText());
-        mailMap.put("receiver_email","kjh55514@naver.com, s22270836@sjajeju.kr");
+        mailMap.put("receiver_email","hs_admin@sjajeju.kr");
         mailMap.put("student_id", userMap.get("student_id"));
 
         // 히스토리 쌓기
@@ -61,7 +57,7 @@ public class MailService {
     }
 
     public List<Map<String, Object>> selectMailHistory(Map<String,Object> userMap) {
-        if (userMap.get("google_email").equals("jimho0419@gmail.com") || userMap.get("google_email").equals("s22270836@sjajeju.kr")){
+        if (userMap.get("google_email").equals("s22270836@sjajeju.kr")){
             log.info("관리자계정 입니다.");
             userMap.put("admin","Y");
         }
@@ -77,7 +73,7 @@ public class MailService {
         studentMapper.updateStudent(gradeMap);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("kjh55514@naver.com","s22270836@sjajeju.kr");      //받는 사람 이메일
+        message.setTo("hs_admin@sjajeju.kr");      //받는 사람 이메일
         message.setSubject("Add & Drop Meeting Request – Graduation Credit");                                  //메일 제목
         message.setText("This is to request a personal meeting regarding a student’s course change due to graduation credit requirements at SJA Jeju. A one-on-one meeting is required for this process.\n" +
                 "\n" +
@@ -97,7 +93,7 @@ public class MailService {
         Map<String,Object> mailMap = new HashMap<>();
         mailMap.put("title",message.getSubject());
         mailMap.put("content",message.getText());
-        mailMap.put("receiver_email", "kjh55514@naver.com, s22270836@sjajeju.kr");
+        mailMap.put("receiver_email", "hs_admin@sjajeju.kr");
         mailMap.put("student_id", userMap.get("student_id"));
 
         // 히스토리 쌓기
