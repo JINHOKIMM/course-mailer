@@ -115,7 +115,6 @@
         })
         .then(data => {
             loginUser = data;
-            console.log("로그인 사용자:", loginUser);
 
             // 예시
             // loginUser.email
@@ -175,7 +174,6 @@
             nextCourses: next
         };
 
-        console.log("전송 데이터:", payload);
 
         // fetch("/api/courses", { ... })
         alert("다음 단계로 이동 (콘솔 확인)");
