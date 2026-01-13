@@ -27,9 +27,21 @@
 
     <!-- header -->
     <div id="header" class="header">
-        <h1 class="logo">
-            <a href="/main">St. Johnsbury Academy Jeju</a>
-        </h1>
+        <div style="
+            position: relative;
+        ">
+                    <h1 class="logo">
+                        <a href="/main">St. Johnsbury Academy Jeju</a>
+                    </h1>
+                    <p class="sub" style="
+            color: #c3c3c3;
+            font-size: 11px;
+            position: absolute;
+            top: 43px;
+            left: 57px;
+        ">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
+        </div>
+
         <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
 
         <div class="userBox">
@@ -139,7 +151,6 @@
             <button type="button" class="btn pt" onclick="onGradeYes()">Yes</button>
             <button type="button" class="btn red" onclick="onGradeNo()">No</button>
         </div>
-        <p class="sub">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
     </div>
 
     <div class="loading-dim" style="display:none;">
@@ -607,10 +618,7 @@
         const $checked = $("input[name='grade']:checked");
         let grade = $checked.length ? $checked.val() : null;
 
-        if (!grade) {
-            alert("Please select your grade.");
-            return;
-        }
+
 
         $.ajax({
             url: "/course/myCourse",
