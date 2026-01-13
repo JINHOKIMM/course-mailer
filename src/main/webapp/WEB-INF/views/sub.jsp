@@ -26,9 +26,20 @@
 
     <!-- header -->
     <div id="header" class="header">
-        <h1 class="logo">
-            <a href="/main">St. Johnsbury Academy Jeju</a>
-        </h1>
+        <div style="
+            position: relative;
+        ">
+            <h1 class="logo">
+                <a href="/main">St. Johnsbury Academy Jeju</a>
+            </h1>
+            <p class="sub" style="
+            color: #c3c3c3;
+            font-size: 11px;
+            position: absolute;
+            top: 43px;
+            left: 57px;
+        ">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
+        </div>
         <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
 
         <div class="userBox">
