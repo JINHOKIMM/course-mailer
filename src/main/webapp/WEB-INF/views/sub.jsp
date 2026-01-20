@@ -38,14 +38,15 @@
             position: absolute;
             top: 43px;
             left: 57px;
-        ">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
+        ">Created by Minseo (Hera) Kim<br>Site managed by Minseo (Hera) Kim</p>
         </div>
         <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
 
         <div class="userBox">
             <ul>
-                <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
                 <li><button type="button" onclick="location.href='/mailHistory';" class="logout">history</button></li>
+                <li id="adminMenu" style="display:none;"><button type="button" onclick="location.href='/admin';" class="logout">admin mode</button></li>
+                <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
             </ul>
         </div>
     </div>
@@ -205,7 +206,7 @@
             <p class="sub" id="receiver_email">hs_admin@sjajeju.kr</p>
 
             <div class="txtBox">
-                <textarea id="content" placeholder="메일 내용을 입력하세요"></textarea>
+                <textarea id="content" placeholder="Please enter your message"></textarea>
             </div>
 
             <div class="btn-wrap">
@@ -217,7 +218,7 @@
     <div class="loading-dim" style="display:none;">
         <div class="loading-box">
             <img src="/assets/img/mailSending.gif" alt="sending mail">
-            <p>메일을 발송중입니다...</p>
+            <p>Sending email...</p>
         </div>
     </div>
 </div>
@@ -243,6 +244,18 @@
                 userGrade = user.grade;
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");
+                const adminEmails = [
+                    "zachariah.fromme@sjajeju.kr",
+                    "s22270836@sjajeju.kr",
+                    "sja.adddrop.hera@gmail.com",
+                    "jimho0419@gmail.com"
+                ];
+
+                // 🔹 admin 메뉴 노출 조건
+                if (adminEmails.includes(user.google_email)) {
+                    $("#adminMenu").show();
+                }
+
 
                 selectMyCourse();
             },
@@ -397,10 +410,9 @@
             xhrFields: { withCredentials: true },
             success: function (res) {
 
-                const planned = res.planned; // O
-                const finalList = res.final; // Y 우선 + O fallback
+                const planned = res.planned;
+                const finalList = res.final;
 
-                // period → 과목명 매핑
                 const before = { A:'-', B:'-', C:'-', D:'-', E:'-' };
                 const after  = { A:'-', B:'-', C:'-', D:'-', E:'-' };
 
@@ -411,35 +423,64 @@
 
                 finalList.forEach(function(item){
                     after[item.period] = item.course_name;
-                    if(item.room) after[item.period] += " ("+item.room+")";
+                    if(item.room) after[item.period] += "("+item.room+")";
                 });
 
-                var mailContent =
-                    "This is to report that the following student has requested a course change at SJA Jeju.\n\n" +
+                // 변경사항 체크
+                const hasChanges = ['A','B','C','D','E'].some(p => before[p] !== after[p]);
 
-                    "Student Name: [" + userNm + "]\n" +
-                    "Student Email: [" + userEmail + "]\n" +
-                    "Grade: [" + userGrade + "]\n\n" +
+                var mailContent;
 
-                    "Original Course: [" +
-                    before.A + " A ], [" +
-                    before.B + " B ], [" +
-                    before.C + " C ], [" +
-                    before.D + " D ], [" +
-                    before.E + " E ]\n\n" +
+                if (hasChanges) {
+                    mailContent =
+                        "This is to report that the following student has requested a course change at SJA Jeju.\n\n" +
 
-                    "Revised Course: [" +
-                    after.A + " A ], [" +
-                    after.B + " B ], [" +
-                    after.C + " C ], [" +
-                    after.D + " D ], [" +
-                    after.E + " E ]\n\n" +
+                        "Student Name: [" + userNm + "]\n" +
+                        "Student Email: [" + userEmail + "]\n" +
+                        "Grade: [" + userGrade + "]\n\n" +
 
-                    "Please review and advise on the next steps.\n\n" +
+                        "Original Course: [" +
+                        before.A + " A ], [" +
+                        before.B + " B ], [" +
+                        before.C + " C ], [" +
+                        before.D + " D ], [" +
+                        before.E + " E ]\n\n" +
 
-                    "Sincerely,\n" +
-                    "Hera Kim\n" +
-                    "SJA Jeju";
+                        "Revised Course: [" +
+                        after.A + " A ], [" +
+                        after.B + " B ], [" +
+                        after.C + " C ], [" +
+                        after.D + " D ], [" +
+                        after.E + " E ]\n\n" +
+
+                        "Please review and advise on the next steps.\n\n" +
+
+                        "Sincerely,\n" +
+                        "Hera Kim\n" +
+                        "SJA Jeju";
+                } else {
+                    alert("There are no changes to the course selection.");
+
+                    mailContent =
+                        "This is to report that the following student has requested a course change at SJA Jeju.\n\n" +
+
+                        "Student Name: [" + userNm + "]\n" +
+                        "Student Email: [" + userEmail + "]\n" +
+                        "Grade: [" + userGrade + "]\n\n" +
+
+                        "No changes have been made to the course selection.\n\n" +
+
+                        "Current Course: [" +
+                        before.A + " A ], [" +
+                        before.B + " B ], [" +
+                        before.C + " C ], [" +
+                        before.D + " D ], [" +
+                        before.E + " E ]\n\n" +
+
+                        "Sincerely,\n" +
+                        "Hera Kim\n" +
+                        "SJA Jeju";
+                }
 
                 $("#content").val(mailContent);
             },

@@ -114,4 +114,21 @@ public class CourseApiController {
         );
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<?> selectCourseList(@AuthenticationPrincipal OAuth2User user) {
+        Map<String,Object> userMap = requireLogin(user);
+
+        // 비즈니스 로직은 서비스로
+        return ResponseEntity.ok(
+                courseService.selectCourseList(userMap)
+        );
+    }
+    @PostMapping("/update")
+    public void updateCourse(@AuthenticationPrincipal OAuth2User user, @RequestBody Map<String, Object> params) {
+        Map<String,Object> userMap = requireLogin(user);
+        params.put("student_id",userMap.get("student_id"));
+        courseService.updateCourse(params);
+    }
+
+
 }

@@ -25,15 +25,22 @@ public class MailService {
         this.studentMapper = studentMapper;
     }
 
+    public void sendNoLog(SimpleMailMessage message){
+        mailSender.send(message);
+    }
+
     @Transactional
     public void mailSend(Map<String,Object> userMap, Map<String,Object> body) {
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("hs_admin@sjajeju.kr");      //받는 사람 이메일
+
+
+        message.setTo("zachariah.fromme@sjajeju.kr", "tasia.sawyer@sjajeju.kr", "gregg.shoultz@sjajeju.kr");      //받는 사람 이메일
         message.setSubject("Course Change Report");                      //메일 제목
         message.setText((String) body.get("content"));                   //내용
         message.setFrom("AddDropSjajeju <sja@gmail.com>");               //보내는사람
-
+        System.out.println("\"zachariah.fromme@sjajeju.kr\", \"tasia.sawyer@sjajeju.kr\", \"gregg.shoultz@sjajeju.kr\"");
+        System.out.println(body.get("content"));
         // 메일전송
         mailSender.send(message);
 
@@ -57,7 +64,13 @@ public class MailService {
     }
 
     public List<Map<String, Object>> selectMailHistory(Map<String,Object> userMap) {
-        if (userMap.get("google_email").equals("s22270836@sjajeju.kr")){
+        if (userMap.get("google_email").equals("s22270836@sjajeju.kr")
+                || userMap.get("google_email").equals("jimho0419@gmail.com")
+                || userMap.get("google_email").equals("sja.adddrop.hera@gmail.com")
+                || userMap.get("google_email").equals("zachariah.fromme@sjajeju.kr")
+                || userMap.get("google_email").equals("tasia.sawyer@sjajeju.kr")
+                || userMap.get("google_email").equals("gregg.shoultz@sjajeju.kr")
+        ){
             log.info("관리자계정 입니다.");
             userMap.put("admin","Y");
         }
@@ -73,7 +86,7 @@ public class MailService {
         studentMapper.updateStudent(gradeMap);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("hs_admin@sjajeju.kr");      //받는 사람 이메일
+        message.setTo("zachariah.fromme@sjajeju.kr", "tasia.sawyer@sjajeju.kr", "gregg.shoultz@sjajeju.kr");      //받는 사람 이메일
         message.setSubject("Add & Drop Meeting Request – Graduation Credit");                                  //메일 제목
         message.setText("This is to request a personal meeting regarding a student’s course change due to graduation credit requirements at SJA Jeju. A one-on-one meeting is required for this process.\n" +
                 "\n" +
@@ -89,6 +102,11 @@ public class MailService {
 
         // 메일전송
         mailSender.send(message);
+
+        System.out.println("\"zachariah.fromme@sjajeju.kr\", \"tasia.sawyer@sjajeju.kr\", \"gregg.shoultz@sjajeju.kr\"");
+        System.out.println(message.getText());
+
+
 
         Map<String,Object> mailMap = new HashMap<>();
         mailMap.put("title",message.getSubject());

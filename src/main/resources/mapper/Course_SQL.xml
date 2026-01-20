@@ -223,6 +223,51 @@
 
     </update>
 
+    <select id="selectCourseList" resultType="map">
+        SELECT
+            course_seq,
+            course_code,
+            course_name,
+            period,
+            room,
+            student_count,
+            max_seats,
+            teacher_name,
+            created_at
+        FROM course
+        ORDER BY course_name, period;
+    </select>
+
+    <update id="updateCourse" parameterType="map">
+        UPDATE course
+        SET
+            student_count = #{student_count},
+            max_seats = #{max_seats}
+        WHERE course_seq = #{course_seq}
+    </update>
+
+    <insert id="insertCourseHistory" parameterType="map">
+        INSERT INTO course_history (
+            course_seq,
+            before_student_count,
+            before_max_seats,
+            after_student_count,
+            after_max_seats,
+            changed_by
+        )
+        SELECT
+            course_seq,
+            student_count,
+            max_seats,
+            #{student_count},
+            #{max_seats},
+            #{student_id}
+        FROM course
+        WHERE course_seq = #{course_seq}
+    </insert>
+
+
+
 
 </mapper>
 

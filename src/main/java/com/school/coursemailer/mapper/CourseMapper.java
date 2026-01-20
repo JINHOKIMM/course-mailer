@@ -36,5 +36,11 @@ public interface CourseMapper {
 
     String selectRoom(Map<String, Object> userMap);
 
+    List<Map<String, Object>> selectCourseList();
+
+    void updateCourse(Map<String, Object> params);
+
+    void insertCourseHistory(Map<String, Object> params);
+
     //void updateMyCourse(Map<String, String> userMap);
 }

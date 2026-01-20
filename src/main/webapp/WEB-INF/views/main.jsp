@@ -39,15 +39,16 @@
             position: absolute;
             top: 43px;
             left: 57px;
-        ">Created by Minseo (Hera) Kim<br>‘Site managed by Minseo (Hera) Kim</p>
+        ">Created by Minseo (Hera) Kim<br>Site managed by Minseo (Hera) Kim</p>
         </div>
 
         <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
 
         <div class="userBox">
             <ul>
-                <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
                 <li><button type="button" onclick="location.href='/mailHistory';" class="logout">history</button></li>
+                <li id="adminMenu" style="display:none;"><button type="button" onclick="location.href='/admin';" class="logout">admin mode</button></li>
+                <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
             </ul>
         </div>
     </div>
@@ -144,14 +145,7 @@
     <!-- //container -->
     <div class="grade-dim" style="display:none;"></div>
     <!-- popup -->
-    <div class="popup grade-popup" style="display: none;">
-        <p class="tit">Are you changing your class schedule<br>because of graduation credits?</p>
-        <p>If you select "Yes," an email will be sent to your<br>counselor, and you'll just need to have a meeting.<br>If you select "No," you'll be redirected to the schedule<br>change website.</p>
-        <div class="btn-wrap">
-            <button type="button" class="btn pt" onclick="onGradeYes()">Yes</button>
-            <button type="button" class="btn red" onclick="onGradeNo()">No</button>
-        </div>
-    </div>
+
 
     <div class="loading-dim" style="display:none;">
         <div class="loading-box">
@@ -183,6 +177,18 @@
                 $("#userNm").text(user.name);
                 $("#userPicture").attr("src", user.picture || "/assets/img/user.png");
 
+                const adminEmails = [
+                    "zachariah.fromme@sjajeju.kr",
+                    "s22270836@sjajeju.kr",
+                    "sja.adddrop.hera@gmail.com",
+                    "jimho0419@gmail.com"
+                ];
+
+                // 🔹 admin 메뉴 노출 조건
+                if (adminEmails.includes(user.google_email)) {
+                    $("#adminMenu").show();
+                }
+
                 // ✅ grade 라디오 체크 동기화
                 if (user.grade === 13 && user.mail_seq) {
                     alert(
@@ -201,9 +207,8 @@
 
                     $("input[name='grade']").prop("checked", false);
                     $("input[name='grade'][value='" + gradeText + "']").prop("checked", true);
-                }
-                else {
-                    openGradeModal();
+                }else {
+                    //openGradeModal();
                 }
 
                 selectCourseList();
@@ -375,15 +380,15 @@
     }
 
     function openGradeModal() {
-        $('.grade-dim').fadeIn(200);     // ✅
+        /*$('.grade-dim').fadeIn(200);     // ✅
         $('.grade-popup').fadeIn(200);   // ✅
-        $('body').addClass('lock');
+        $('body').addClass('lock');*/
     }
 
     function closeGradeModal() {
-        $('.grade-popup').fadeOut(200);
+        /*$('.grade-popup').fadeOut(200);
         $('.grade-dim').fadeOut(200);
-        $('body').removeClass('lock');
+        $('body').removeClass('lock');*/
     }
 
     function escapeHtml(str) {
@@ -650,33 +655,6 @@
             return false;
         }
     });
-
-    function onGradeYes() {
-        $.ajax({
-            url: "/mail/graduateMailSend",
-            type: "POST",
-            xhrFields: {
-                withCredentials: true   // 로그인 세션 유지
-            },
-            beforeSend: function () {
-                $(".loading-dim").css("display", "flex").hide().fadeIn(200);
-            },
-            success: function () {
-                alert("The email has been sent.");
-                location.href = "/mailHistory";
-            },
-            error: function (xhr) {
-                alert("에러: " + (xhr.responseText || xhr.status));
-            },
-            complete: function () {
-                $(".loading-dim").fadeOut(200);
-            }
-        });
-    }
-
-    function onGradeNo() {
-        closeGradeModal();
-    }
 
 </script>
 </body>

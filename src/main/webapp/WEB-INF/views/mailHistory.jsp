@@ -36,6 +36,7 @@
         <button class="user"><span id="userNm">Hera Kim</span><img id="userPicture" src="#" alt=""></button>
         <div class="userBox">
             <ul>
+                <li><button type="button" onclick="location.href='/admin';" class="logout">admin mode</button></li>
                 <li><button type="button" class="logout"  onclick="location.href='${pageContext.request.contextPath}/logout'">sign out</button></li>
             </ul>
             <!--

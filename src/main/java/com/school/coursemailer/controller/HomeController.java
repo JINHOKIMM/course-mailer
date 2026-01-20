@@ -36,4 +36,9 @@ public class HomeController {
     public String mailHistory() {
         return "mailHistory";
     }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
 }

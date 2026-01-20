@@ -67,7 +67,6 @@ public class CourseService {
         }
     }
 
-
     public Map<String, Object> selectMyFutureCourse(Map<String, Object> userMap) {
 
         List<Map<String, Object>> planned = courseMapper.selectPlanned(userMap); // O
@@ -120,12 +119,15 @@ public class CourseService {
         userMap.put("status","Y");
         String course_id = courseMapper.selectCourseId(userMap);    //기존 ID
         String room = courseMapper.selectRoom(userMap);             //기존 room
-
+        
+        boolean needInsert = false;
         if(course_id == null){
-            courseMapper.insertMyCourse(userMap);
-            result.put("res","000");
-            return result;
+            needInsert = true;
+            userMap.put("status","O");
+            course_id = courseMapper.selectCourseId(userMap);    //기존 ID
+            room = courseMapper.selectRoom(userMap);
         }
+        userMap.put("status","Y");
 
         Map<String,String> param = new HashMap<>();
         param.put("course_id",course_id);                           //기존 ID
@@ -142,12 +144,27 @@ public class CourseService {
         // student_course 테이블의 기존id 가져오기(시퀀스)
         String id = courseMapper.selectStudentCourseId(userMap);
 
-        param.put("nextCourseId", (String) userMap.get("course_id"));
-        param.put("id", id);
-        courseMapper.updatePeriodCourse(param);
+        if(needInsert){
+            courseMapper.insertMyCourse(userMap);
+            result.put("res","000");
+            return result;
+        } else {
+            param.put("nextCourseId", (String) userMap.get("course_id"));
+            param.put("id", id);
+            courseMapper.updatePeriodCourse(param);
+            result.put("res","000");
+            return result;
+        }
 
-        result.put("res","000");
+    }
 
-        return result;
+    public List<Map<String, Object>> selectCourseList(Map<String, Object> userMap) {
+        return courseMapper.selectCourseList();
+    }
+
+    @Transactional
+    public void updateCourse(Map<String, Object> params) {
+        courseMapper.insertCourseHistory(params);
+        courseMapper.updateCourse(params);
     }
 }

@@ -28,7 +28,7 @@
             ,m.title
             ,m.receiver_email
             ,m.content
-            ,m.sent_at
+            ,m.sent_at AT TIME ZONE 'Asia/Seoul' as sent_at
             ,s.google_email
         FROM
             mail m left join student s on m.student_id = s.student_id
