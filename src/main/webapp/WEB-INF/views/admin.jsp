@@ -62,7 +62,7 @@
                         <table class="tbl green" id="adminTable">
                             <colgroup>
                                 <col style="width:8%;">
-                                <col style="width:41%;">
+                                <col style="width:31%;">
                                 <col style="width:10%;">
                                 <col style="width:11%;">
                                 <col style="width:12%;">

@@ -187,6 +187,10 @@
                 // 🔹 admin 메뉴 노출 조건
                 if (adminEmails.includes(user.google_email)) {
                     $("#adminMenu").show();
+                }else{  // 2026.01.21 잠시 막음.( 다음날 삭제 예정 )
+                    alert("You are not an admin.");
+                    location.href='${pageContext.request.contextPath}/logout';
+                    return;
                 }
 
                 // ✅ grade 라디오 체크 동기화
