@@ -1,7 +1,11 @@
 package com.school.coursemailer.service;
 
+import com.school.coursemailer.controller.UnauthorizedException;
 import com.school.coursemailer.mapper.StudentMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +19,19 @@ public class StudentService {
 
     public StudentService(StudentMapper studentMapper) {
         this.studentMapper = studentMapper;
+    }
+
+    public Map<String, Object> getAuthenticatedUserMap() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof OAuth2User)) {
+            throw new UnauthorizedException();
+        }
+        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+        String sub = oauth2User.getAttribute("sub");
+        if (sub == null) {
+            throw new UnauthorizedException();
+        }
+        return selectUserMap(sub);
     }
 
     @Transactional

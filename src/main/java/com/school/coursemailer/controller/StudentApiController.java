@@ -1,16 +1,13 @@
 package com.school.coursemailer.controller;
 
-import com.school.coursemailer.service.CourseService;
 import com.school.coursemailer.service.MailService;
 import com.school.coursemailer.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,21 +31,6 @@ public class StudentApiController {
     public StudentApiController(StudentService studentService, MailService mailService) {
         this.studentService = studentService;
         this.mailService = mailService;
-    }
-
-    // =========================
-    // 공통 로그인 체크 메서드
-    // =========================
-    private OAuth2User requireLogin(OAuth2User user) {
-        if (user == null) {
-            log.info("=== 로그인 x ===");
-            throw new UnauthorizedException();
-        }
-        return user;
-    }
-
-    private String getSub(OAuth2User user) {
-        return user.getAttribute("sub");
     }
 
     @GetMapping("/test")
@@ -121,10 +103,14 @@ public class StudentApiController {
 
 
     @GetMapping("/me")
-    public ResponseEntity<?> me(@AuthenticationPrincipal OAuth2User user) {
+    public ResponseEntity<?> me() {
         log.info("=== start 로그인 정보 확인 ===");
 
-        user = requireLogin(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof OAuth2User)) {
+            throw new UnauthorizedException();
+        }
+        OAuth2User user = (OAuth2User) authentication.getPrincipal();
 
 
         // OAuth 정보 추출
@@ -143,10 +129,11 @@ public class StudentApiController {
     }
 
     @PutMapping("/userInfo")
-    public ResponseEntity<?> updateGrade(@AuthenticationPrincipal OAuth2User user, @RequestParam("grade") String grade ) {
-        user = requireLogin(user);
+    public ResponseEntity<?> updateGrade(@RequestParam("grade") String grade ) {
+        Map<String, Object> userMap = studentService.getAuthenticatedUserMap();
+        String sub = (String) userMap.get("sub");
 
-        studentService.updateGrade(getSub(user), grade);
+        studentService.updateGrade(sub, grade);
 
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);

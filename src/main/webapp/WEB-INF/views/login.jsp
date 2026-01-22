@@ -23,8 +23,8 @@
             <div class="brand-sub">Sign in to continue</div>
         </div>
 
-        <!-- Google 로그인 (일시 비활성화) -->
-        <a class="btn btn-google is-disabled" aria-disabled="true" tabindex="-1" style="pointer-events: none; opacity: .6; cursor: not-allowed;" onclick="return false;">
+        <!-- Google 로그인 -->
+        <a class="btn btn-google" href="${pageContext.request.contextPath}/oauth2/authorization/google">
             <span class="google-icon" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 48 48">
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.73 1.22 9.25 3.62l6.9-6.9C36.05 2.55 30.4 0 24 0 14.64 0 6.55 5.38 2.64 13.22l8.02 6.23C12.3 13.02 17.67 9.5 24 9.5z"/>
@@ -34,13 +34,8 @@
                     <path fill="none" d="M0 0h48v48H0z"/>
                 </svg>
             </span>
-            <!-- <span class="btn-text">Continue with Google</span>-->
-            <span class="btn-text">Temporarily Disabled</span>
+            <span class="btn-text">Continue with Google</span>
         </a>
-        <p class="notice" style="margin-top:12px; font-size:14px; color:#666; text-align:center;">
-            We are currently conducting inspections to provide more stable services.
-            The inspection will be completed tomorrow morning, and it will be available for normal use after that.
-        </p>
     </div>
 </div>
 </body>

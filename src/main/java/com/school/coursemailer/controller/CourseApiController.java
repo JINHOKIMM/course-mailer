@@ -5,11 +5,8 @@ import com.school.coursemailer.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -24,28 +21,8 @@ public class CourseApiController {
         this.studentService = studentService;
     }
 
-    // =========================
-    // 공통 로그인 체크 메서드
-    // =========================
-    private Map<String,Object> requireLogin(OAuth2User user) {
-        if (user == null) {
-            log.info("=== 로그인 x ===");
-            throw new UnauthorizedException();
-        }
-        Map<String,Object> userMap = new HashMap<>();
-        userMap = studentService.selectUserMap(getSub(user));
-        return userMap;
-    }
-
-    private String getSub(OAuth2User user) {
-        return user.getAttribute("sub");
-    }
-
-
     @GetMapping("/courseList1")
-    public ResponseEntity<?> selectCourseList1(@AuthenticationPrincipal OAuth2User user) {
-        Map<String,Object> userMap = requireLogin(user);
-
+    public ResponseEntity<?> selectCourseList1() {
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
                 courseService.selectCourseList1()
@@ -53,10 +30,7 @@ public class CourseApiController {
     }
 
     @GetMapping("/courseList2")
-    public ResponseEntity<?> selectCourseList2(@AuthenticationPrincipal OAuth2User user) {
-
-        Map<String,Object> userMap = requireLogin(user);
-
+    public ResponseEntity<?> selectCourseList2() {
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
                 courseService.selectCourseList2()
@@ -64,8 +38,8 @@ public class CourseApiController {
     }
 
     @GetMapping("/myCourse")
-    public ResponseEntity<?> selectMyCourse(@AuthenticationPrincipal OAuth2User user) {
-        Map<String,Object> userMap = requireLogin(user);
+    public ResponseEntity<?> selectMyCourse() {
+        Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
 
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
@@ -74,16 +48,16 @@ public class CourseApiController {
     }
 
     @PostMapping("/myCourse")
-    public ResponseEntity<?> updateMyCourse(@AuthenticationPrincipal OAuth2User user, @RequestBody Map<String, Object> body) {
-        Map<String,Object> userMap = requireLogin(user);
+    public ResponseEntity<?> updateMyCourse(@RequestBody Map<String, Object> body) {
+        Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
 
         courseService.updateMyCourse(userMap, body);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/myFutureCourse")
-    public ResponseEntity<?> selectMyFutureCourse(@AuthenticationPrincipal OAuth2User user) {
-        Map<String,Object> userMap = requireLogin(user);
+    public ResponseEntity<?> selectMyFutureCourse() {
+        Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
 
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
@@ -92,8 +66,8 @@ public class CourseApiController {
     }
 
     @GetMapping("/availableCourseList")
-    public ResponseEntity<?> selectAvailableCourseList(@AuthenticationPrincipal OAuth2User user, @RequestParam String period) {
-        Map<String,Object> userMap = requireLogin(user);
+    public ResponseEntity<?> selectAvailableCourseList(@RequestParam String period) {
+        Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
 
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
@@ -102,9 +76,9 @@ public class CourseApiController {
     }
 
     @PutMapping("/swap")
-    public ResponseEntity<?> updateMyPeriod(@AuthenticationPrincipal OAuth2User user, @RequestParam String period,
+    public ResponseEntity<?> updateMyPeriod(@RequestParam String period,
                                             @RequestParam("course_id") String courseId,@RequestParam String room) {
-        Map<String,Object> userMap = requireLogin(user);
+        Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
         userMap.put("period",period);
         userMap.put("course_id",courseId);
         userMap.put("room",room);
@@ -115,17 +89,15 @@ public class CourseApiController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> selectCourseList(@AuthenticationPrincipal OAuth2User user) {
-        Map<String,Object> userMap = requireLogin(user);
-
+    public ResponseEntity<?> selectCourseList() {
         // 비즈니스 로직은 서비스로
         return ResponseEntity.ok(
-                courseService.selectCourseList(userMap)
+                courseService.selectCourseList(null)
         );
     }
     @PostMapping("/update")
-    public void updateCourse(@AuthenticationPrincipal OAuth2User user, @RequestBody Map<String, Object> params) {
-        Map<String,Object> userMap = requireLogin(user);
+    public void updateCourse(@RequestBody Map<String, Object> params) {
+        Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
         params.put("student_id",userMap.get("student_id"));
         courseService.updateCourse(params);
     }

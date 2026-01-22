@@ -51,10 +51,10 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'p6spy:p6spy:3.9.1'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-}
+    	implementation 'org.springframework.boot:spring-boot-starter-mail'
+    	implementation 'p6spy:p6spy:3.9.1'
+    	implementation 'org.apache.poi:poi-ooxml:5.2.5' // For .xlsx Excel file generation
+    	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'}
 
 tasks.named('test') {
 	useJUnitPlatform()

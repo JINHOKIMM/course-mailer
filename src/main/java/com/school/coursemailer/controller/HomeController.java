@@ -1,11 +1,22 @@
 package com.school.coursemailer.controller;
 
+import com.school.coursemailer.service.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Map;
+
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
+
+    private final StudentService studentService;
 
     @GetMapping("/")
     public String root() {
@@ -28,9 +39,7 @@ public class HomeController {
     }
 
     @GetMapping("/sub")
-    public String sub() {
-        return "sub";
-    }
+    public String sub() { return "sub"; }
 
     @GetMapping("/mailHistory")
     public String mailHistory() {
