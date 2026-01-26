@@ -103,6 +103,12 @@ input[type="radio"]:checked + label::before {outline: 1px solid #87b234; border:
 .userBox .logout {width: 200px; padding: 6px 15px; text-align: left; line-height: 1.5;}
 .userBox .logout::before {content: ' '; display: block; width: 20px; height: 20px; background: url(../img/ico_logout.png) no-repeat center center;}
 .userBox .logout:hover {text-decoration: underline;}
+.userBox .admin {width: 200px; padding: 6px 15px; text-align: left; line-height: 1.5;}
+.userBox .admin::before {content: ' '; display: block; width: 20px; height: 20px; background: url(../img/ico_admin.png) no-repeat center center;}
+.userBox .admin:hover {text-decoration: underline;}
+.userBox .mail {width: 200px; padding: 6px 15px; text-align: left; line-height: 1.5;}
+.userBox .mail::before {content: ' '; display: block; width: 20px; height: 20px; background: url(../img/ico_mail.png) no-repeat center center;}
+.userBox .mail:hover {text-decoration: underline;}
 
 .container {flex-grow: 1; width: 100%; max-width: 1200px; padding: 55px 0 30px 0; margin: 0 auto 0 auto;}
 .container .list {width: 100%}
