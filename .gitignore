@@ -4,7 +4,7 @@
 
 # IntelliJ
 /.idea/
-/*.iml
+*.iml
 
 # Logs
 *.log
@@ -13,4 +13,9 @@
 .DS_Store
 Thumbs.db
 
-echo src/main/resources/application.yaml
+# Secrets / config (절대 Git에 안 올림)
+mcp.json
+application.yaml
+application-*.yaml
+.env
+*.env
