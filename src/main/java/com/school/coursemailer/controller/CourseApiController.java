@@ -77,10 +77,10 @@ public class CourseApiController {
 
     @PutMapping("/swap")
     public ResponseEntity<?> updateMyPeriod(@RequestParam String period,
-                                            @RequestParam("course_id") String courseId,@RequestParam String room) {
+                                            @RequestParam("course_code") String courseCode,@RequestParam String room) {
         Map<String,Object> userMap = studentService.getAuthenticatedUserMap();
         userMap.put("period",period);
-        userMap.put("course_id",courseId);
+        userMap.put("course_code",courseCode);
         userMap.put("room",room);
 
         return ResponseEntity.ok(
@@ -102,5 +102,11 @@ public class CourseApiController {
         courseService.updateCourse(params);
     }
 
+    @GetMapping("/conditions")
+    public ResponseEntity<?> selectConditions() {
+        return ResponseEntity.ok(
+                courseService.selectConditions()
+        );
+    }
 
 }

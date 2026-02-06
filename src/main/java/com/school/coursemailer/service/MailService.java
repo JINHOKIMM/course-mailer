@@ -35,12 +35,12 @@ public class MailService {
         SimpleMailMessage message = new SimpleMailMessage();
 
 
-        message.setTo("zachariah.fromme@sjajeju.kr", "tasia.sawyer@sjajeju.kr", "gregg.shoultz@sjajeju.kr");      //받는 사람 이메일
+        //message.setTo("zachariah.fromme@sjajeju.kr", "tasia.sawyer@sjajeju.kr", "gregg.shoultz@sjajeju.kr");      //받는 사람 이메일
+        message.setTo("kjh55514@naver.com");      //받는 사람 이메일
         message.setSubject("Course Change Report");                      //메일 제목
         message.setText((String) body.get("content"));                   //내용
         message.setFrom("AddDropSjajeju <sja@gmail.com>");               //보내는사람
-        System.out.println("\"zachariah.fromme@sjajeju.kr\", \"tasia.sawyer@sjajeju.kr\", \"gregg.shoultz@sjajeju.kr\"");
-        System.out.println(body.get("content"));
+
         // 메일전송
         mailSender.send(message);
 
@@ -52,10 +52,10 @@ public class MailService {
 
         // 히스토리 쌓기
         mailMapper.insertMailSeq(mailMap);
-        Integer mail_seq = (Integer) mailMap.get("mail_seq");
+        Integer mailId = (Integer) mailMap.get("mail_id");
 
         Map<String,Object> map = new HashMap<>();
-        map.put("mail_seq",mail_seq);
+        map.put("last_mail_id",mailId);
         map.put("sub",userMap.get("sub"));
 
         // 메일발송여부 업데이트 mail_seq
@@ -86,7 +86,8 @@ public class MailService {
         studentMapper.updateStudent(gradeMap);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("zachariah.fromme@sjajeju.kr", "tasia.sawyer@sjajeju.kr", "gregg.shoultz@sjajeju.kr");      //받는 사람 이메일
+        //message.setTo("zachariah.fromme@sjajeju.kr", "tasia.sawyer@sjajeju.kr", "gregg.shoultz@sjajeju.kr");      //받는 사람 이메일
+        message.setTo("kjh55514@naver.com");      //받는 사람 이메일
         message.setSubject("Add & Drop Meeting Request – Graduation Credit");                                  //메일 제목
         message.setText("This is to request a personal meeting regarding a student’s course change due to graduation credit requirements at SJA Jeju. A one-on-one meeting is required for this process.\n" +
                 "\n" +
@@ -116,10 +117,10 @@ public class MailService {
 
         // 히스토리 쌓기
         mailMapper.insertMailSeq(mailMap);
-        Integer mail_seq = (Integer) mailMap.get("mail_seq");
+        Integer mailId = (Integer) mailMap.get("mail_id");
 
         Map<String,Object> map = new HashMap<>();
-        map.put("mail_seq",mail_seq);
+        map.put("last_mail_id",mailId);
         map.put("sub",userMap.get("sub"));
 
         // 메일발송여부 업데이트 mail_seq

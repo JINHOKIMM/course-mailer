@@ -16,14 +16,14 @@
         #{receiver_email},
         #{content}
         )
-        <selectKey keyProperty="mail_seq" resultType="int" order="AFTER">
-            SELECT currval(pg_get_serial_sequence('mail','mail_seq'))
+        <selectKey keyProperty="mail_id" resultType="int" order="AFTER">
+            SELECT currval(pg_get_serial_sequence('mail','mail_id'))
         </selectKey>
     </insert>
 
     <select id="selectMailHistory" parameterType="Map" resultType="Map">
         SELECT
-            m.mail_seq
+            m.mail_id
             ,m.student_id
             ,m.title
             ,m.receiver_email
@@ -40,6 +40,3 @@
         ORDER BY sent_at DESC
     </select>
 </mapper>
-
-
-

@@ -55,4 +55,9 @@ public class HomeController {
     public String adminLogin() {
         return "adminLogin";
     }
+
+    @GetMapping("/courseCondition")
+    public String courseCondition() {
+        return "courseCondition";
+    }
 }

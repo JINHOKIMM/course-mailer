@@ -42,5 +42,8 @@ public interface CourseMapper {
 
     void insertCourseHistory(Map<String, Object> params);
 
+    List<Map<String, Object>> selectGradeConditions();
+    List<Map<String, Object>> selectPrerequisites();
+
     //void updateMyCourse(Map<String, String> userMap);
 }

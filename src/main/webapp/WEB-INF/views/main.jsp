@@ -161,12 +161,12 @@
                 }--%>
 
                 // ✅ grade 라디오 체크 동기화
-                if (user.grade === 13 && user.mail_seq) {
+                if (user.grade === 13 && user.last_mail_id) {
                     alert(
                         "An email regarding your course change due to graduation credit requirements has already been sent."
                     );
                     location.href = "/mailHistory";
-                }else if (user.grade !== 13 && user.mail_seq) {
+                }else if (user.grade !== 13 && user.last_mail_id) {
                     alert(
                         "Your course change request email has already been sent.\n" +
                         "You cannot send another request.\n\n" +
@@ -247,7 +247,7 @@
 
     function createCourseRow(course, prefix) {
         const tr = document.createElement("tr");
-        const id = prefix + "_course_" + course.course_id;
+        const id = prefix + "_course_" + course.course_code;
 
         // checkbox
         const tdCheck = document.createElement("td");
@@ -403,7 +403,7 @@
                 // [{ course_id, status, period, ... }]
 
                 res.forEach(myCourse => {
-                    const courseId = myCourse.course_id;
+                    const courseId = myCourse.course_code;
                     const status = myCourse.status;
                     const period = myCourse.period;
 
@@ -489,7 +489,7 @@
                 usedPeriods.add(period);
 
                 courseList.push({
-                    course_id: courseId,
+                    course_code: courseId,
                     period: period,
                     room: room,
                     status: status
@@ -512,7 +512,7 @@
             const courseId = id.replace(prefix, "");
 
             courseList.push({
-                course_id: courseId,
+                course_code: courseId,
                 status: status
             });
         });

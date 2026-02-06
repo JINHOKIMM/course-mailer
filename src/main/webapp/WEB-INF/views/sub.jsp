@@ -513,7 +513,7 @@
                 },
                 data: {
                     period: oldPeriod,
-                    course_id: courseCode,
+                    course_code: courseCode,
                     room: room
                 },
                 success: function (result) {

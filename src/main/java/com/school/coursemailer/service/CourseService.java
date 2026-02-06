@@ -130,7 +130,7 @@ public class CourseService {
         userMap.put("status","Y");
 
         Map<String,String> param = new HashMap<>();
-        param.put("course_id",course_id);                           //기존 ID
+        param.put("course_code",course_id);                        //기존 코드
         param.put("period", (String) userMap.get("period"));        //기존과 현재 period는 같음
         param.put("room",room);                                     //기존 room
 
@@ -149,8 +149,8 @@ public class CourseService {
             result.put("res","000");
             return result;
         } else {
-            param.put("nextCourseId", (String) userMap.get("course_id"));
-            param.put("id", id);
+            param.put("nextCourseCode", (String) userMap.get("course_code"));
+            param.put("student_course_id", id);
             courseMapper.updatePeriodCourse(param);
             result.put("res","000");
             return result;
@@ -166,5 +166,12 @@ public class CourseService {
     public void updateCourse(Map<String, Object> params) {
         courseMapper.insertCourseHistory(params);
         courseMapper.updateCourse(params);
+    }
+
+    public Map<String, Object> selectConditions() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("gradeConditions", courseMapper.selectGradeConditions());
+        result.put("prerequisites", courseMapper.selectPrerequisites());
+        return result;
     }
 }

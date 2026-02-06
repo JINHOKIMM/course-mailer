@@ -7,28 +7,28 @@
 
     <select id="selectCourseList1" resultType="map">
         SELECT
-        cct.course_id,
+        cct.course_code,
         cct.course_name
         FROM course_cd_tb cct
         WHERE
-            cct.course_id BETWEEN 0 and 119
-        ORDER BY cct.course_id
+            cct.course_code BETWEEN 0 and 119
+        ORDER BY cct.course_code
     </select>
 
     <select id="selectCourseList2" resultType="map">
         SELECT
-            cct.course_id,
+            cct.course_code,
             cct.course_name,
             cct.room
         FROM course_cd_tb cct
-        ORDER BY cct.course_id
+        ORDER BY cct.course_code
     </select>
 
     <select id="selectMyCourse" parameterType="map" resultType="map">
         SELECT
-            id
+            student_course_id
              ,student_id
-             ,course_id
+             ,course_code
              ,period
              ,status
         FROM
@@ -40,14 +40,14 @@
     <insert id="insertMyCourse" parameterType="map">
         INSERT INTO student_course
         (student_id
-        ,course_id
+        ,course_code
         ,period
         ,status
         ,room)
         VALUES
             (
               #{student_id}::integer
-            ,#{course_id}::integer
+            ,#{course_code}::integer
             ,#{period}
             ,#{status}
             ,#{room}
@@ -63,92 +63,76 @@
 
     <select id="selectPlanned" parameterType="map" resultType="map">
         SELECT
-            sc.id
+            sc.student_course_id
              ,sc.student_id
-             ,sc.course_id
+             ,sc.course_code
              ,sc.period
              ,sc.status
              ,sc.room
              ,cct.course_name
              ,cct.lock_yn
         FROM
-            student_course sc left join course_cd_tb cct on sc.course_id = cct.course_id
+            student_course sc left join course_cd_tb cct on sc.course_code = cct.course_code
         where
             status = 'O' and student_id = #{student_id}::integer
     </select>
 
     <select id="selectFinal" parameterType="map" resultType="map">
         SELECT
-            sc.id
+            sc.student_course_id
              ,sc.student_id
-             ,sc.course_id
+             ,sc.course_code
              ,sc.period
              ,sc.status
              ,sc.room
              ,cct.course_name
              ,cct.lock_yn
         FROM
-            student_course sc left join course_cd_tb cct on sc.course_id = cct.course_id
+            student_course sc left join course_cd_tb cct on sc.course_code = cct.course_code
         where
             status = 'Y' and student_id = #{student_id}::integer
     </select>
 
     <select id="selectAvailableCourseList" parameterType="map" resultType="map">
+        WITH completed_courses AS (
+            SELECT course_code FROM student_course
+            WHERE student_id = #{student_id}::integer AND status = 'X'
+        ),
+        satisfied_groups AS (
+            SELECT DISTINCT cg.target_course_code
+            FROM course_condition_group cg
+            WHERE NOT EXISTS (
+                SELECT 1 FROM course_condition_item ci
+                WHERE ci.condition_group_id = cg.condition_group_id
+                AND ci.required_course_code NOT IN (SELECT course_code FROM completed_courses)
+            )
+        )
         SELECT
-        c.course_seq,
-        c.course_code,
-        c.course_name,
-        substring(c.period,1,1) as period,
-        c.room,
-        c.student_count,
-        c.max_seats
+            c.course_id,
+            c.course_code,
+            c.course_name,
+            substring(c.period,1,1) as period,
+            c.room,
+            c.student_count,
+            c.max_seats
         FROM course c
         WHERE substring(c.period,1,1) = #{period}
         <if test="grade != null">
             AND (
-            NOT EXISTS (
-            SELECT 1
-            FROM course_grade_condition g
-            WHERE g.course_id = c.course_code
-            )
-            OR EXISTS (
-            SELECT 1
-            FROM course_grade_condition g
-            WHERE g.course_id = c.course_code
-            AND #{grade}::integer BETWEEN g.min_grade AND g.max_grade
-            )
+                NOT EXISTS (SELECT 1 FROM course_grade_condition g WHERE g.course_code = c.course_code)
+                OR EXISTS (SELECT 1 FROM course_grade_condition g WHERE g.course_code = c.course_code AND #{grade}::integer BETWEEN g.min_grade AND g.max_grade)
             )
         </if>
         AND (
-        NOT EXISTS (
-        SELECT 1
-        FROM course_condition_group cg
-        WHERE cg.target_course_code = c.course_code
+            NOT EXISTS (SELECT 1 FROM course_condition_group cg WHERE cg.target_course_code = c.course_code)
+            OR c.course_code IN (SELECT target_course_code FROM satisfied_groups)
         )
-        OR EXISTS (
-        SELECT 1
-        FROM course_condition_group cg
-        WHERE cg.target_course_code = c.course_code
-        AND NOT EXISTS (
-        SELECT 1
-        FROM course_condition_item ci
-        WHERE ci.group_id = cg.id
-        AND NOT EXISTS (
-        SELECT 1
-        FROM student_course sc
-        WHERE sc.student_id = #{student_id}::integer
-        AND sc.course_id = ci.required_course_code
-        AND sc.status = 'X'
-        )
-        )
-        )
-        )
-        ORDER BY c.course_code , course_seq
+        ORDER BY c.course_code, course_id
     </select>
 
     <select id="selectCourseId" parameterType="Map" resultType="String">
         SELECT
-            course_id
+            course_code
         FROM
             student_course
         WHERE
@@ -162,7 +146,7 @@
         SET
             student_count = student_count - 1
         WHERE
-            course_code = #{course_id}::integer
+            course_code = #{course_code}::integer
             AND substring(period,1,1) = #{period}
             AND room = #{room}
     </update>
@@ -172,7 +156,7 @@
         SET
             student_count = student_count + 1
         WHERE
-            course_code = #{course_id}::integer
+            course_code = #{course_code}::integer
             AND substring(period,1,1) = #{period}
             AND room = #{room}
     </update>
@@ -185,7 +169,7 @@
                 END
         FROM course
         WHERE
-            course_code = #{course_id}::integer
+            course_code = #{course_code}::integer
             AND substring(period,1,1) = #{period}
           AND room = #{room}
 
@@ -193,7 +177,7 @@
 
     <select id="selectStudentCourseId" parameterType="Map" resultType="String">
         SELECT
-            id
+            student_course_id
         FROM
             student_course
         WHERE
@@ -216,16 +200,16 @@
     <update id="updatePeriodCourse" parameterType="Map">
         UPDATE student_course
         SET
-            course_id = #{nextCourseId}::integer,
+            course_code = #{nextCourseCode}::integer,
             room = #{room}
         WHERE
-            id = #{id}::integer
+            student_course_id = #{student_course_id}::integer
 
     </update>
 
     <select id="selectCourseList" resultType="map">
         SELECT
-            course_seq,
+            course_id,
             course_code,
             course_name,
             period,
@@ -243,12 +227,12 @@
         SET
             student_count = #{student_count},
             max_seats = #{max_seats}
-        WHERE course_seq = #{course_seq}
+        WHERE course_id = #{course_id}
     </update>
 
     <insert id="insertCourseHistory" parameterType="map">
         INSERT INTO course_history (
-            course_seq,
+            course_id,
             before_student_count,
             before_max_seats,
             after_student_count,
@@ -256,20 +240,39 @@
             changed_by
         )
         SELECT
-            course_seq,
+            course_id,
             student_count,
             max_seats,
             #{student_count},
             #{max_seats},
             #{student_id}
         FROM course
-        WHERE course_seq = #{course_seq}
+        WHERE course_id = #{course_id}
     </insert>
 
+    <select id="selectGradeConditions" resultType="map">
+        SELECT
+            c.course_code,
+            c.course_name as target_course_name,
+            g.min_grade,
+            g.max_grade
+        FROM course_grade_condition g
+        JOIN course_cd_tb c ON c.course_code = g.course_code
+        ORDER BY c.course_name
+    </select>
 
-
+    <select id="selectPrerequisites" resultType="map">
+        SELECT
+            cg.target_course_code,
+            c.course_name as target_course_name,
+            cg.group_no,
+            string_agg(rc.course_name, ' + ' ORDER BY rc.course_name) as required_courses
+        FROM course_condition_group cg
+        JOIN course_condition_item ci ON ci.condition_group_id = cg.condition_group_id
+        JOIN course_cd_tb c ON c.course_code = cg.target_course_code
+        JOIN course_cd_tb rc ON rc.course_code = ci.required_course_code
+        GROUP BY cg.target_course_code, c.course_name, cg.group_no
+        ORDER BY c.course_name, cg.group_no
+    </select>
 
 </mapper>
-
-
-

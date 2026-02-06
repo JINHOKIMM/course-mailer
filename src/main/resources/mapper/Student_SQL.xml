@@ -16,7 +16,7 @@
             ,given_name
             ,sub
             ,grade
-            ,mail_seq
+            ,last_mail_id
         FROM student
         WHERE sub = #{sub}
     </select>
@@ -62,8 +62,8 @@
             <if test="grade != null">
                 grade = #{grade}::integer,
             </if>
-            <if test="mail_seq != null">
-                mail_seq = #{mail_seq}::integer,
+            <if test="last_mail_id != null">
+                last_mail_id = #{last_mail_id}::integer,
             </if>
         </set>
         WHERE sub = #{sub}::varchar
@@ -78,7 +78,7 @@
              ,email_verified
              ,given_name
              ,sub,grade
-             ,mail_seq
+             ,last_mail_id
         FROM student
         WHERE sub = #{sub}
     </select>

@@ -117,7 +117,7 @@
 
                 $.each(res, function (idx, course) {
                     var html = "";
-                    html += "<tr id='row_" + course.course_seq + "' " +
+                    html += "<tr id='row_" + course.course_id + "' " +
                             "data-student='" + course.student_count + "' " +
                             "data-max='" + course.max_seats + "'>";
 
@@ -139,11 +139,11 @@
 
                     html += "  <td>";
                     html += "      <button type='button' class='btn btn-edit' ";
-                    html += "              onclick='enableEdit(" + course.course_seq + ")'>Edit</button>";
+                    html += "              onclick='enableEdit(" + course.course_id + ")'>Edit</button>";
                     html += "      <button type='button' class='btn btn-save' style='display:none;' ";
-                    html += "              onclick='saveRow(" + course.course_seq + ")'>Save</button>";
+                    html += "              onclick='saveRow(" + course.course_id + ")'>Save</button>";
                     html += "      <button type='button' class='btn btn-cancel' style='display:none;' ";
-                    html += "              onclick='cancelEdit(" + course.course_seq + ")'>Cancel</button>";
+                    html += "              onclick='cancelEdit(" + course.course_id + ")'>Cancel</button>";
                     html += "  </td>";
 
 
@@ -211,7 +211,7 @@
             type: "POST",
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify({
-                course_seq: id,
+                course_id: id,
                 student_count: studentCount,
                 max_seats: maxSeats
             }),
